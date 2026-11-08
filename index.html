@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sushi Game - スマホ対応版</title>
+    <title>Sushi Game - 完全対応版</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="theme-default">
@@ -123,7 +123,7 @@
         <div class="panel panel-zukan">
             <h2 style="margin: 0 0 10px 0; font-size: 26px;" data-i18n="zukanTitle">単語図鑑</h2>
             <div class="zukan-header">
-                <span class="zukan-emoji" data-i18n="emojiCol">絵文字</span>
+                <span class="zukan-emoji"></span>
                 <span class="zukan-en" data-i18n="englishCol">英語</span>
                 <span class="zukan-ja" data-i18n="japaneseCol">日本語</span>
                 <span class="zukan-ro" data-i18n="romajiCol">ローマ字</span>
@@ -140,8 +140,9 @@
             <h3 id="modal-ja" style="font-size: 28px; margin: 0 0 5px 0;">りんご</h3>
             <div id="modal-en-ro" style="font-size: 16px; opacity: 0.9; margin-bottom: 12px;">Apple (ringo)</div>
             <p id="modal-trivia" style="font-size: 14px; line-height: 1.4; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; margin-bottom: 15px; text-align: left;"></p>
-            <button id="modal-speak-btn" class="btn" style="background-color: #00796b; width: 100%; margin-bottom: 8px;">🔊 発音を聞く</button>
-            <button id="modal-close-btn" class="btn btn-back" style="width: 100%; margin: 0;" data-i18n="closeBtn">とじる</button>
+            <!-- モーダル内ボタンのクラス・スタイルを統一しズレを解消 -->
+            <button id="modal-speak-btn" class="btn modal-btn" style="background-color: #00796b;">🔊 発音を聞く</button>
+            <button id="modal-close-btn" class="btn btn-back modal-btn" data-i18n="closeBtn">とじる</button>
         </div>
     </div>
 

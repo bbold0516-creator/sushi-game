@@ -22,7 +22,6 @@ const i18n = {
         wordListPlaceholder: "日本語, English\n例:\nもも, Peach\nぶどう, Grape",
         storeTitle: "マイストア",
         zukanTitle: "単語図鑑",
-        emojiCol: "絵文字",
         englishCol: "英語 (English)",
         japaneseCol: "日本語",
         romajiCol: "ローマ字",
@@ -85,7 +84,6 @@ const i18n = {
         wordListPlaceholder: "Japanese, English\ne.g.:\nもも, Peach\nぶどう, Grape",
         storeTitle: "My Store",
         zukanTitle: "Word Encyclopedia",
-        emojiCol: "Emoji",
         englishCol: "English",
         japaneseCol: "Japanese",
         romajiCol: "Romaji",
@@ -128,71 +126,71 @@ const i18n = {
     }
 };
 
-// --- デフォルトステージの問題データ ---
+// --- デフォルトステージの問題データ（英語トリビア追加） ---
 const defaultStagesData = [
     {
         words: [
-            { hiragana: "こんにちは", speak: "こんにちは", romaji: "konnichiwa", english: "Hello", emoji: "👋", trivia: "「こんにちは」は、昼から夕方にかけて使われるおなじみの明るい挨拶だよ！" },
-            { hiragana: "ありがとう", speak: "ありがとう", romaji: "arigatou", english: "Thank you", emoji: "🙏", trivia: "「ありがとう」の語源は、漢字で「有難う（めったにない）」という意味なんだ。" },
-            { hiragana: "さようなら", speak: "さようなら", romaji: "sayounara", english: "Goodbye", emoji: "👋", trivia: "「さようなら」は、もともと「左様ならば（それでは）」という接続詞だったんだよ。" },
-            { hiragana: "おはよう", speak: "おはよう", romaji: "ohayou", english: "Good morning", emoji: "☀️", trivia: "「お早う」は、歌舞伎の舞台裏などで「お早いお着きですね」と言ったのが由来だよ。" },
-            { hiragana: "すみません", speak: "すみません", romaji: "sumimasen", english: "Excuse me", emoji: "🙇", trivia: "「すみません」は、感謝や謝罪、呼びかけなど幅広く使える便利な言葉だよ。" },
-            { hiragana: "あか", speak: "赤", romaji: "aka", english: "Red", emoji: "🔴", trivia: "赤色は人の目を引きやすく、エネルギーや情熱を感じさせる色だよ。" },
-            { hiragana: "あお", speak: "青", romaji: "ao", english: "Blue", emoji: "🔵", trivia: "青色は海や空を連想させ、心を落ち着かせるリラックス効果があるよ。" },
-            { hiragana: "きいろ", speak: "黄色", romaji: "kiiro", english: "Yellow", emoji: "🟡", trivia: "黄色は太陽をイメージさせる、明るく楽しい気分になる色だよ。" },
-            { hiragana: "みどり", speak: "緑", romaji: "midori", english: "Green", emoji: "🟢", trivia: "緑色は森林や植物などの自然を象徴し、目に優しい色だよ。" },
-            { hiragana: "しろ", speak: "白", romaji: "shiro", english: "White", emoji: "⚪", trivia: "白色は純粋さや清潔さを表すほか、すべての光を反射する色だよ。" },
-            { hiragana: "くろ", speak: "黒", romaji: "kuro", english: "Black", emoji: "⚫", trivia: "黒色はすべての光を吸収する色で、高級感や強さを引き立てるよ。" },
-            { hiragana: "おねがい", speak: "お願い", romaji: "onegai", english: "Please", emoji: "🤲", trivia: "何かをお願いするときは、丁寧な笑顔と一緒にお願いすると気持ちが伝わるよ！" },
-            { hiragana: "ごめんなさい", speak: "ごめんなさい", romaji: "gomennasai", english: "Sorry", emoji: "🙇", trivia: "素直に「ごめんなさい」と言える人は、みんなから信頼される素敵な人だよ。" },
-            { hiragana: "はじめまして", speak: "はじめまして", romaji: "hajimemashite", english: "Nice to meet you", emoji: "🤝", trivia: "新しい出会いの第一歩にぴったりの、大切な挨拶の言葉だよ。" },
-            { hiragana: "おやすみ", speak: "おやすみ", romaji: "oyasumi", english: "Good night", emoji: "🌙", trivia: "「おやすみなさい」は、夜だけでなく昼間にお休みする人にも使われるよ。" },
-            { hiragana: "はい", speak: "はい", romaji: "hai", english: "Yes", emoji: "👍", trivia: "元気よく「はい！」と返事をすると、相手も自分も気持ちが明るくなるね。" },
-            { hiragana: "いいえ", speak: "いいえ", romaji: "iie", english: "No", emoji: "👎", trivia: "「いいえ」は、謙遜したり、否定したりするときに優しく使われるよ。" },
-            { hiragana: "またね", speak: "またね", romaji: "matane", english: "See you", emoji: "👋", trivia: "「またね」は、次に会う楽しみを分かち合う、温かい別れの挨拶だよ。" }
+            { hiragana: "こんにちは", speak: "こんにちは", romaji: "konnichiwa", english: "Hello", emoji: "👋", trivia: "「こんにちは」は、昼から夕方にかけて使われるおなじみの明るい挨拶だよ！", triviaEn: "'Konnichiwa' is a cheerful greeting used from midday to evening!" },
+            { hiragana: "ありがとう", speak: "ありがとう", romaji: "arigatou", english: "Thank you", emoji: "🙏", trivia: "「ありがとう」の語源は、漢字で「有難う（めったにない）」という意味なんだ。", triviaEn: "The origin of 'Arigatou' comes from the meaning 'rare and difficult to exist'." },
+            { hiragana: "さようなら", speak: "さようなら", romaji: "sayounara", english: "Goodbye", emoji: "👋", trivia: "「さようなら」は、もともと「左様ならば（それでは）」という接続詞だったんだよ。", triviaEn: "'Sayounara' originally functioned as a conjunction meaning 'If that is the case'." },
+            { hiragana: "おはよう", speak: "おはよう", romaji: "ohayou", english: "Good morning", emoji: "☀️", trivia: "「お早う」は、歌舞伎の舞台裏などで「お早いお着きですね」と言ったのが由来だよ。", triviaEn: "'Ohayou' originates from greeting people who arrived early backstage in Kabuki." },
+            { hiragana: "すみません", speak: "すみません", romaji: "sumimasen", english: "Excuse me", emoji: "🙇", trivia: "「すみません」は、感謝や謝罪、呼びかけなど幅広く使える便利な言葉だよ。", triviaEn: "'Sumimasen' is a versatile phrase used for gratitude, apologies, and getting attention." },
+            { hiragana: "あか", speak: "赤", romaji: "aka", english: "Red", emoji: "🔴", trivia: "赤色は人の目を引きやすく、エネルギーや情熱を感じさせる色だよ。", triviaEn: "Red easily catches the eye and evokes a sense of energy and passion." },
+            { hiragana: "あお", speak: "青", romaji: "ao", english: "Blue", emoji: "🔵", trivia: "青色は海や空を連想させ、心を落ち着かせるリラックス効果があるよ。", triviaEn: "Blue is associated with the ocean and sky, offering a relaxing calming effect." },
+            { hiragana: "きいろ", speak: "黄色", romaji: "kiiro", english: "Yellow", emoji: "🟡", trivia: "黄色は太陽をイメージさせる、明るく楽しい気分になる色だよ。", triviaEn: "Yellow brings to mind the sun, creating a bright and cheerful mood." },
+            { hiragana: "みどり", speak: "緑", romaji: "midori", english: "Green", emoji: "🟢", trivia: "緑色は森林や植物などの自然を象徴し、目に優しい色だよ。", triviaEn: "Green symbolizes nature such as forests and plants, and is gentle on the eyes." },
+            { hiragana: "しろ", speak: "白", romaji: "shiro", english: "White", emoji: "⚪", trivia: "白色は純粋さや清潔さを表すほか、すべての光を反射する色だよ。", triviaEn: "White represents purity and cleanliness, and reflects all light." },
+            { hiragana: "くろ", speak: "黒", romaji: "kuro", english: "Black", emoji: "⚫", trivia: "黒色はすべての光を吸収する色で、高級感や強さを引き立てるよ。", triviaEn: "Black absorbs all light, highlighting a sense of luxury and strength." },
+            { hiragana: "おねがい", speak: "お願い", romaji: "onegai", english: "Please", emoji: "🤲", trivia: "何かをお願いするときは、丁寧な笑顔と一緒にお願いすると気持ちが伝わるよ！", triviaEn: "When asking for a favor, pairing it with a polite smile helps convey your feelings!" },
+            { hiragana: "ごめんなさい", speak: "ごめんなさい", romaji: "gomennasai", english: "Sorry", emoji: "🙇", trivia: "素直に「ごめんなさい」と言える人は、みんなから信頼される素敵な人だよ。", triviaEn: "People who can honestly say 'Gomennasai' are wonderful and trusted by everyone." },
+            { hiragana: "はじめまして", speak: "はじめまして", romaji: "hajimemashite", english: "Nice to meet you", emoji: "🤝", trivia: "新しい出会いの第一歩にぴったりの、大切な挨拶の言葉だよ。", triviaEn: "An essential greeting phrase perfect for the first step of a new encounter." },
+            { hiragana: "おやすみ", speak: "おやすみ", romaji: "oyasumi", english: "Good night", emoji: "🌙", trivia: "「おやすみなさい」は、夜だけでなく昼間にお休みする人にも使われるよ。", triviaEn: "'Oyasumi' can be used for people resting during the day as well as at night." },
+            { hiragana: "はい", speak: "はい", romaji: "hai", english: "Yes", emoji: "👍", trivia: "元気よく「はい！」と返事をすると、相手も自分も気持ちが明るくなるね。", triviaEn: "Answering cheerfully with 'Hai!' brightens the mood for both you and others." },
+            { hiragana: "いいえ", speak: "いいえ", romaji: "iie", english: "No", emoji: "👎", trivia: "「いいえ」は、謙遜したり、否定したりするときに優しく使われるよ。", triviaEn: "'Iie' is used gently when expressing modesty or negation." },
+            { hiragana: "またね", speak: "またね", romaji: "matane", english: "See you", emoji: "👋", trivia: "「またね」は、次に会う楽しみを分かち合う、温かい別れの挨拶だよ。", triviaEn: "'Matane' is a warm parting greeting sharing the joy of meeting again." }
         ]
     },
     {
         words: [
-            { hiragana: "いぬ", speak: "犬", romaji: "inu", english: "Dog", emoji: "🐶", trivia: "犬の嗅覚は人間の数万倍から100万倍以上もあり、匂いを嗅ぎ分けるのが得意だよ。" },
-            { hiragana: "ねこ", speak: "猫", romaji: "neko", english: "Cat", emoji: "🐱", trivia: "猫は高いところが大好きで、暗いところでも人間の約6分の1の光で見えるんだ。" },
-            { hiragana: "くま", speak: "熊", romaji: "kuma", english: "Bear", emoji: "🐻", trivia: "熊は見た目によらず走るのがとても速く、時速50キロメートル近くで走れるよ。" },
-            { hiragana: "うさぎ", speak: "ウサギ", romaji: "usagi", english: "Rabbit", emoji: "🐰", trivia: "ウサギの長い耳は、音を聞き取るだけでなく体温を調節する役割もあるよ。" },
-            { hiragana: "さる", speak: "サル", romaji: "saru", english: "Monkey", emoji: "🐵", trivia: "サルは道具を使ったり、仲間同士で毛づくろいをしてコミュニケーションをとるよ。" },
-            { hiragana: "きりん", speak: "キリン", romaji: "kirin", english: "Giraffe", emoji: "🦒", trivia: "キリンの首の骨の数は、人間と同じ「7個」なんだよ。びっくりだね！" },
-            { hiragana: "ぞう", speak: "ゾウ", romaji: "zou", english: "Elephant", emoji: "🐘", trivia: "ゾウの鼻は約10万本もの筋肉があり、重い丸太を持ち上げたりするのに使うよ。" },
-            { hiragana: "らいおん", speak: "ライオン", romaji: "raion", english: "Lion", emoji: "🦁", trivia: "ライオンは「百獣の王」と呼ばれるけれど、狩りをするのはおもにメスの仕事なんだ。" },
-            { hiragana: "ぱんだ", speak: "パンダ", romaji: "panda", english: "Panda", emoji: "🐼", trivia: "パンダの主食は竹や笹で、1日の大半を食べて過ごすんだよ。" },
-            { hiragana: "とら", speak: "トラ", romaji: "tora", english: "Tiger", emoji: "🐯", trivia: "トラの体のしま模様は、毛だけでなく皮膚にも同じように刻まれているんだよ。" },
-            { hiragana: "うま", speak: "馬", romaji: "uma", english: "Horse", emoji: "🐴", trivia: "ウマは立ったまま眠ることができ、その秘密は特殊な足の骨と筋肉にあるよ。" },
-            { hiragana: "ぶた", speak: "豚", romaji: "buta", english: "Pig", emoji: "🐷", trivia: "ブタは実はとてもきずなを大切にするきれい好きな動物で、頭もすごくいいんだ。" },
-            { hiragana: "ひつじ", speak: "羊", romaji: "hitsuji", english: "Sheep", emoji: "🐑", trivia: "ヒツジの目は横長で、首を動かさずに広い範囲を見渡すことができるよ。" },
-            { hiragana: "きつね", speak: "キツネ", romaji: "kitsune", english: "Fox", emoji: "🦊", trivia: "キツネは優れた聴覚を持っていて、雪の下の獲物の音を聞き取ることができるよ。" },
-            { hiragana: "たぬき", speak: "タヌキ", romaji: "tanuki", english: "Raccoon dog", emoji: "🦝", trivia: "タヌキは夜行性で、木に登ることも得意な日本の固有の動物だよ。" },
-            { hiragana: "ぺんぎん", speak: "ペンギン", romaji: "pengin", english: "Penguin", emoji: "🐧", trivia: "ペンギンは鳥の仲間だけど空は飛べない代わりに、海の中をすごいスピードで泳ぐよ。" },
-            { hiragana: "ごりら", speak: "ゴリラ", romaji: "gorira", english: "Gorilla", emoji: "🦍", trivia: "ゴリラは草食中心で、胸を叩く「ドラミング」で自分の強さや機嫌を伝えるよ。" }
+            { hiragana: "いぬ", speak: "犬", romaji: "inu", english: "Dog", emoji: "🐶", trivia: "犬の嗅覚は人間の数万倍から100万倍以上もあり、匂いを嗅ぎ分けるのが得意だよ。", triviaEn: "A dog's sense of smell is tens of thousands to a million times stronger than a human's." },
+            { hiragana: "ねこ", speak: "猫", romaji: "neko", english: "Cat", emoji: "🐱", trivia: "猫は高いところが大好きで、暗いところでも人間の約6分の1の光で見えるんだ。", triviaEn: "Cats love high places and can see in the dark using about one-sixth of the light humans need." },
+            { hiragana: "くま", speak: "熊", romaji: "kuma", english: "Bear", emoji: "🐻", trivia: "熊は見た目によらず走るのがとても速く、時速50キロメートル近くで走れるよ。", triviaEn: "Despite their appearance, bears can run extremely fast, close to 50 kilometers per hour." },
+            { hiragana: "うさぎ", speak: "ウサギ", romaji: "usagi", english: "Rabbit", emoji: "🐰", trivia: "ウサギの長い耳は、音を聞き取るだけでなく体温を調節する役割もあるよ。", triviaEn: "A rabbit's long ears not only catch sounds but also help regulate body temperature." },
+            { hiragana: "さる", speak: "サル", romaji: "saru", english: "Monkey", emoji: "🐵", trivia: "サルは道具を使ったり、仲間同士で毛づくろいをしてコミュニケーションをとるよ。", triviaEn: "Monkeys use tools and groom each other to communicate within their groups." },
+            { hiragana: "きりん", speak: "キリン", romaji: "kirin", english: "Giraffe", emoji: "🦒", trivia: "キリンの首の骨の数は、人間と同じ「7個」なんだよ。びっくりだね！", triviaEn: "Despite their long necks, giraffes have the exact same number of neck bones as humans: seven!" },
+            { hiragana: "ぞう", speak: "ゾウ", romaji: "zou", english: "Elephant", emoji: "🐘", trivia: "ゾウの鼻は約10万本もの筋肉があり、重い丸太を持ち上げたりするのに使うよ。", triviaEn: "An elephant's trunk has about 100,000 muscles, used for lifting heavy logs and more." },
+            { hiragana: "らいおん", speak: "ライオン", romaji: "raion", english: "Lion", emoji: "🦁", trivia: "ライオンは「百獣の王」と呼ばれるけれど、狩りをするのはおもにメスの仕事なんだ。", triviaEn: "Known as the 'King of Beasts', lions actually rely mostly on females for hunting." },
+            { hiragana: "ぱんだ", speak: "パンダ", romaji: "panda", english: "Panda", emoji: "🐼", trivia: "パンダの主食は竹や笹で、1日の大半を食べて過ごすんだよ。", triviaEn: "Pandas' main diet is bamboo, and they spend most of their day eating." },
+            { hiragana: "とら", speak: "トラ", romaji: "tora", english: "Tiger", emoji: "🐯", trivia: "トラの体のしま模様は、毛だけでなく皮膚にも同じように刻まれているんだよ。", triviaEn: "A tiger's striped pattern is imprinted not only on its fur but also on its skin." },
+            { hiragana: "うま", speak: "馬", romaji: "uma", english: "Horse", emoji: "🐴", trivia: "ウマは立ったまま眠ることができ、その秘密は特殊な足の骨と筋肉にあるよ。", triviaEn: "Horses can sleep standing up thanks to specialized leg bones and muscles." },
+            { hiragana: "ぶた", speak: "豚", romaji: "buta", english: "Pig", emoji: "🐷", trivia: "ブタは実はとてもきずなを大切にするきれい好きな動物で、頭もすごくいいんだ。", triviaEn: "Pigs are actually clean animals that value bonds deeply and are very smart." },
+            { hiragana: "ひつじ", speak: "羊", romaji: "hitsuji", english: "Sheep", emoji: "🐑", trivia: "ヒツジの目は横長で、首を動かさずに広い範囲を見渡すことができるよ。", triviaEn: "Sheep have horizontal pupils, allowing them to see a wide area without moving their necks." },
+            { hiragana: "きつね", speak: "キツネ", romaji: "kitsune", english: "Fox", emoji: "🦊", trivia: "キツネは優れた聴覚を持っていて、雪の下の獲物の音を聞き取ることができるよ。", triviaEn: "Foxes have exceptional hearing and can detect prey moving underneath the snow." },
+            { hiragana: "たぬき", speak: "タヌキ", romaji: "tanuki", english: "Raccoon dog", emoji: "🦝", trivia: "タヌキは夜行性で、木に登ることも得意な日本の固有の動物だよ。", triviaEn: "Raccoon dogs are nocturnal animals native to Japan that excel at climbing trees." },
+            { hiragana: "ぺんぎん", speak: "ペンギン", romaji: "pengin", english: "Penguin", emoji: "🐧", trivia: "ペンギンは鳥の仲間だけど空は飛べない代わりに、海の中をすごいスピードで泳ぐよ。", triviaEn: "Penguins are birds that cannot fly, but instead swim at incredible speeds underwater." },
+            { hiragana: "ごりら", speak: "ゴリラ", romaji: "gorira", english: "Gorilla", emoji: "🦍", trivia: "ゴリラは草食中心で、胸を叩く「ドラミング」で自分の強さや機嫌を伝えるよ。", triviaEn: "Gorillas are mainly herbivorous and use chest-beating 'drumming' to communicate strength or mood." }
         ]
     },
     {
         words: [
-            { hiragana: "りんご", speak: "リンゴ", romaji: "ringo", english: "Apple", emoji: "🍎", trivia: "「1日1個のりんごは医者を遠ざける」という英語のことわざがあるよ。" },
-            { hiragana: "ばなな", speak: "バナナ", romaji: "banana", english: "Banana", emoji: "🍌", trivia: "バナナは木ではなく、大きな「草」の仲間で、黄色い実がなるよ。" },
-            { hiragana: "すいか", speak: "スイカ", romaji: "suika", english: "Watermelon", emoji: "🍉", trivia: "スイカの大部分（約90％）は水分で、夏のおやつの水分補給にぴったりだよ。" },
-            { hiragana: "ごはん", speak: "ごはん", romaji: "gohan", english: "Rice", emoji: "🍚", trivia: "お米（ごはん）は日本の主食で、元気なエネルギーの源になるよ。" },
-            { hiragana: "ぱん", speak: "パン", romaji: "pan", english: "Bread", emoji: "🍞", trivia: "パンは世界中で食べられていて、小麦粉を発酵させて焼くんだよ。" },
-            { hiragana: "けーき", speak: "ケーキ", romaji: "keeki", english: "Cake", emoji: "🍰", trivia: "ケーキはお祝い事やパーティーに欠かせない、甘くてふわふわしたデザートだよ。" },
-            { hiragana: "あいす", speak: "アイス", romaji: "aisu", english: "Ice cream", emoji: "🍨", trivia: "アイスクリームは冷たくて甘く、暑い夏に食べると一気に涼しい気分になるよ。" },
-            { hiragana: "にく", speak: "肉", romaji: "niku", english: "Meat", emoji: "🥩", trivia: "お肉には丈夫な体や筋肉をつくるタンパク質がたっぷり含まれているよ。" },
-            { hiragana: "さかな", speak: "魚", romaji: "sakana", english: "Fish", emoji: "🐟", trivia: "魚は川や海を泳いでいて、頭が良くなる栄養成分（DHAなど）がたくさん入っているよ。" },
-            { hiragana: "すし", speak: "寿司", romaji: "sushi", english: "Sushi", emoji: "🍣", trivia: "お寿司は日本を代表する伝統料理で、今では世界中で大人気なんだよ。" },
-            { hiragana: "らーめん", speak: "ラーメン", romaji: "raamen", english: "Ramen", emoji: "🍜", trivia: "ラーメンはスープや麺の種類が豊富で、湯気と一緒にすする美味しさがたまらないね。" },
-            { hiragana: "かれー", speak: "カレー", romaji: "karee", english: "Curry", emoji: "🍛", trivia: "カレーにはたくさんのスパイスが入っていて、食欲をそそる良い香りが特徴だよ。" },
-            { hiragana: "おにぎり", speak: "おにぎり", romaji: "onigiri", english: "Rice ball", emoji: "🍙", trivia: "おにぎりはご飯をギュッと握った日本伝統のファストフードだよ。" },
-            { hiragana: "みかん", speak: "ミカン", romaji: "mikan", english: "Mandarin orange", emoji: "🍊", trivia: "ミカンにはビタミンCがたっぷり入っていて、風邪予防にぴったりの果物だよ。" },
-            { hiragana: "いちご", speak: "イチゴ", romaji: "ichigo", english: "Strawberry", emoji: "🍓", trivia: "イチゴの表面にあるツブツブの実は、実は一つひとつが別の果実なんだよ。" },
-            { hiragana: "ぷりん", speak: "プリン", romaji: "purin", english: "Pudding", emoji: "🍮", trivia: "プリンは卵と牛乳、砂糖を混ぜて蒸し固めた、なめらかな口当たりが人気のデザートだよ。" },
-            { hiragana: "ちょこ", speak: "チョコ", romaji: "choko", english: "Chocolate", emoji: "🍫", trivia: "チョコレートはカカオから作られていて、食べると心がホッと癒されるよ。" },
-            { hiragana: "ぴざ", speak: "ピザ", romaji: "piza", english: "Pizza", emoji: "🍕", trivia: "ピザはイタリア発祥の料理で、丸い生地にチーズや具材を乗せてオーブンで焼き上げるよ。" }
+            { hiragana: "りんご", speak: "リンゴ", romaji: "ringo", english: "Apple", emoji: "🍎", trivia: "「1日1個のりんごは医者を遠ざける」という英語のことわざがあるよ。", triviaEn: "There is an English proverb: 'An apple a day keeps the doctor away'." },
+            { hiragana: "ばなな", speak: "バナナ", romaji: "banana", english: "Banana", emoji: "🍌", trivia: "バナナは木ではなく、大きな「草」の仲間で、黄色い実がなるよ。", triviaEn: "Bananas are not trees, but rather members of a large herbaceous plant family." },
+            { hiragana: "すいか", speak: "スイカ", romaji: "suika", english: "Watermelon", emoji: "🍉", trivia: "スイカの大部分（約90％）は水分で、夏のおやつの水分補給にぴったりだよ。", triviaEn: "Watermelons are mostly water (about 90%), making them great for summer hydration." },
+            { hiragana: "ごはん", speak: "ごはん", romaji: "gohan", english: "Rice", emoji: "🍚", trivia: "お米（ごはん）は日本の主食で、元気なエネルギーの源になるよ。", triviaEn: "Rice is a staple food in Japan and serves as a great source of energetic fuel." },
+            { hiragana: "ぱん", speak: "パン", romaji: "pan", english: "Bread", emoji: "🍞", trivia: "パンは世界中で食べられていて、小麦粉を発酵させて焼くんだよ。", triviaEn: "Bread is eaten all around the world and is made by fermenting and baking wheat flour." },
+            { hiragana: "けーき", speak: "ケーキ", romaji: "keeki", english: "Cake", emoji: "🍰", trivia: "ケーキはお祝い事やパーティーに欠かせない、甘くてふわふわしたデザートだよ。", triviaEn: "Cakes are sweet, fluffy desserts indispensable for celebrations and parties." },
+            { hiragana: "あいす", speak: "アイス", romaji: "aisu", english: "Ice cream", emoji: "🍨", trivia: "アイスクリームは冷たくて甘く、暑い夏に食べると一気に涼しい気分になるよ。", triviaEn: "Ice cream is cold and sweet, instantly cooling you down on a hot summer day." },
+            { hiragana: "にく", speak: "肉", romaji: "niku", english: "Meat", emoji: "🥩", trivia: "お肉には丈夫な体や筋肉をつくるタンパク質がたっぷり含まれているよ。", triviaEn: "Meat is packed with protein, which helps build a strong body and muscles." },
+            { hiragana: "さかな", speak: "魚", romaji: "sakana", english: "Fish", emoji: "🐟", trivia: "魚は川や海を泳いでいて、頭が良くなる栄養成分（DHAなど）がたくさん入っているよ。", triviaEn: "Fish swim in rivers and seas and are rich in nutrients like DHA that are great for the brain." },
+            { hiragana: "すし", speak: "寿司", romaji: "sushi", english: "Sushi", emoji: "🍣", trivia: "お寿司は日本を代表する伝統料理で、今では世界中で大人気なんだよ。", triviaEn: "Sushi is a representative traditional dish of Japan and is now hugely popular worldwide." },
+            { hiragana: "らーめん", speak: "ラーメン", romaji: "raamen", english: "Ramen", emoji: "🍜", trivia: "ラーメンはスープや麺の種類が豊富で、湯気と一緒にすする美味しさがたまらないね。", triviaEn: "Ramen has endless varieties of soups and noodles, delicious to slurp piping hot." },
+            { hiragana: "かれー", speak: "カレー", romaji: "karee", english: "Curry", emoji: "🍛", trivia: "カレーにはたくさんのスパイスが入っていて、食欲をそそる良い香りが特徴だよ。", triviaEn: "Curry contains numerous spices, known for its appetizing aroma." },
+            { hiragana: "おにぎり", speak: "おにぎり", romaji: "onigiri", english: "Rice ball", emoji: "🍙", trivia: "おにぎりはご飯をギュッと握った日本伝統のファストフードだよ。", triviaEn: "Onigiri are tightly shaped rice balls, a traditional Japanese fast food." },
+            { hiragana: "みかん", speak: "ミカン", romaji: "mikan", english: "Mandarin orange", emoji: "🍊", trivia: "ミカンにはビタミンCがたっぷり入っていて、風邪予防にぴったりの果物だよ。", triviaEn: "Mandarin oranges are packed with vitamin C, making them perfect for preventing colds." },
+            { hiragana: "いちご", speak: "イチゴ", romaji: "ichigo", english: "Strawberry", emoji: "🍓", trivia: "イチゴの表面にあるツブツブの実は、実は一つひとつが別の果実なんだよ。", triviaEn: "The tiny bumps on the surface of a strawberry are actually individual fruits." },
+            { hiragana: "ぷりん", speak: "プリン", romaji: "purin", english: "Pudding", emoji: "🍮", trivia: "プリンは卵と牛乳、砂糖を混ぜて蒸し固めた、なめらかな口当たりが人気のデザートだよ。", triviaEn: "Pudding is a popular smooth dessert made by steaming a mix of eggs, milk, and sugar." },
+            { hiragana: "ちょこ", speak: "チョコ", romaji: "choko", english: "Chocolate", emoji: "🍫", trivia: "チョコレートはカカオから作られていて、食べると心がホッと癒されるよ。", triviaEn: "Chocolate is made from cacao, and eating it helps soothe and heal the heart." },
+            { hiragana: "ぴざ", speak: "ピザ", romaji: "piza", english: "Pizza", emoji: "🍕", trivia: "ピザはイタリア発祥の料理で、丸い生地にチーズや具材を乗せてオーブンで焼き上げるよ。", triviaEn: "Pizza originated in Italy, made with round dough topped with cheese and baked in an oven." }
         ]
     }
 ];
@@ -201,7 +199,7 @@ const defaultStagesData = [
 const themes = [
     { id: 'theme-default', unlockScore: 0, color: '#d32f2f', mode: 'flick' },
     { id: 'theme-wood', unlockScore: 500, color: '#795548', mode: 'flick' },
-    { id: 'theme-pixel', unlockScore: 2500, color: '#00ffcc', mode: 'flick' }, // フリック合計2500点で解放
+    { id: 'theme-pixel', unlockScore: 2500, color: '#00ffcc', mode: 'flick' },
     { id: 'theme-neon', unlockScore: 1000, color: '#00BCD4', mode: 'voice' },
     { id: 'theme-gold', unlockScore: 1500, color: '#FFC107', mode: 'voice' }
 ];

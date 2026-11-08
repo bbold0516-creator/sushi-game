@@ -23,7 +23,7 @@ let isWaitingForTutorial = false;
 
 document.body.className = activeThemeId;
 
-// --- 外部定義された themes（words.js等）のモード・アンロック条件を安全に上書き・追加 ---
+// --- 外部定義された themes のモード・アンロック条件を安全に上書き・追加 ---
 if (typeof themes !== 'undefined') {
     themes.forEach(theme => {
         if (theme.id === 'theme-default') {
@@ -183,7 +183,11 @@ function renderZukan() {
             document.getElementById('modal-emoji').textContent = word.emoji || '🍣';
             document.getElementById('modal-ja').textContent = word.hiragana;
             document.getElementById('modal-en-ro').textContent = `${word.english} (${word.romaji})`;
-            document.getElementById('modal-trivia').textContent = word.trivia || '豆知識が準備中だよ！';
+            
+            // 英語モードのときは英語トリビア、日本語のときは日本語トリビアを表示
+            const triviaText = (currentLang === 'en' && word.triviaEn) ? word.triviaEn : (word.trivia || '豆知識が準備中だよ！');
+            document.getElementById('modal-trivia').textContent = triviaText;
+
             zukanModal.classList.remove('hidden');
             playWordAudio(word, true);
         };
@@ -427,7 +431,9 @@ document.getElementById('save-stage-btn').addEventListener('click', () => {
                     speak: ja,
                     romaji: "",
                     english: en,
-                    emoji: "🍣"
+                    emoji: "🍣",
+                    trivia: "カスタムステージの単語だよ！",
+                    triviaEn: "This is a custom stage word!"
                 });
             }
         }
@@ -854,7 +860,6 @@ gameScreen.addEventListener('touchend', (e) => {
     let touchEndY = e.changedTouches[0].clientY;
     let diffY = touchEndY - touchStartY;
 
-    // 30px以上上下にスワイプされた場合
     if (Math.abs(diffY) > 30) {
         if (diffY < 0) {
             sortSushi('top');    // 上スワイプ
