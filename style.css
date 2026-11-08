@@ -378,3 +378,16 @@ body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg {
 .modal-title { font-size: 48px; font-weight: bold; margin-bottom: 10px; }
 .final-score-value { font-size: 72px; font-weight: bold; color: #ffccbc; margin-bottom: 10px; }
 .new-record { color: #ff5252; font-size: 24px; font-weight: bold; margin-bottom: 20px; height: 30px; }
+
+/* タイトル画面のクレジット表示 */
+#voicevox-credit {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-color);
+    opacity: 0.7;
+    z-index: 150;
+    pointer-events: none;
+}

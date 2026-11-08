@@ -47,6 +47,34 @@ if ('speechSynthesis' in window) {
     updateJapaneseVoices();
 }
 
+// --- 音声ファイル再生の管理用変数 ---
+let currentAudio = null;
+
+// 音声ファイルを再生し、失敗した場合は speechSynthesis にフォールバックする関数
+function playWordAudio(word, force = false) {
+    if (!enableVoice && !force) return;
+
+    // 前の音が鳴っていれば止める
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio = null;
+    }
+
+    const speakText = word.speak || word.hiragana;
+    const audioPath = `sounds/${speakText}.wav`;
+    const audio = new Audio(audioPath);
+    currentAudio = audio;
+
+    audio.play().then(() => {
+        // 再生成功
+    }).catch((error) => {
+        // ファイルが見つからない等の場合は従来の speechSynthesis で読み上げ
+        currentAudio = null;
+        speakJapanese(speakText, force);
+    });
+}
+
 // --- 音声発話関数 (Web Speech API) ---
 function speakJapanese(text, force = false) {
     if ((enableVoice || force) && 'speechSynthesis' in window) {
@@ -121,14 +149,14 @@ function renderZukan() {
             document.getElementById('modal-en-ro').textContent = `${word.english} (${word.romaji})`;
             document.getElementById('modal-trivia').textContent = word.trivia || '豆知識が準備中だよ！';
             zukanModal.classList.remove('hidden');
-            speakJapanese(word.hiragana);
+            playWordAudio(word, true);
         };
         container.appendChild(item);
     });
 }
 
 document.getElementById('modal-speak-btn').addEventListener('click', () => {
-    if (selectedZukanWord) speakJapanese(selectedZukanWord.hiragana, true);
+    if (selectedZukanWord) playWordAudio(selectedZukanWord, true);
 });
 
 document.getElementById('modal-close-btn').addEventListener('click', () => {
@@ -324,6 +352,7 @@ document.getElementById('save-stage-btn').addEventListener('click', () => {
             if (ja && en) {
                 parsedWords.push({
                     hiragana: ja,
+                    speak: ja,
                     romaji: "",
                     english: en,
                     emoji: "🍣"
@@ -524,7 +553,8 @@ function setNextQuestion() {
     const correct = activeWordList[correctIndex];
     currentCorrectWord = correct;
 
-    speakJapanese(correct.hiragana);
+    // 音声ファイルの再生（失敗時はspeechSynthesisで読み上げ）
+    playWordAudio(correct);
 
     let dummyIndex;
     do {
