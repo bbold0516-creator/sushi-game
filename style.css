@@ -399,6 +399,7 @@ body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg, body.theme-pixel
    スマホの横画面など高さが小さい場合 (max-height: 500px)
    ========================================== */
 @media (max-height: 500px) {
+    /* ホーム画面等の既存の調整 */
     .home-title-card {
         padding: 10px 20px;
         margin-bottom: 10px;
@@ -411,7 +412,6 @@ body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg, body.theme-pixel
     .title {
         font-size: 28px !important;
     }
-    /* スコアカード部分をコンパクトにする */
     .home-title-card div[style*="display: flex"] {
         margin-top: 6px !important;
         gap: 8px !important;
@@ -427,8 +427,6 @@ body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg, body.theme-pixel
     .home-title-card div[style*="font-size: min"] {
         font-size: 15px !important;
     }
-
-    /* スタートボタンとマイストアボタンを横並びにする */
     #home-screen .home-btn-group {
         flex-direction: row !important;
         flex-wrap: wrap;
@@ -439,6 +437,69 @@ body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg, body.theme-pixel
         padding: 8px 16px !important;
         font-size: 13px !important;
         margin: 2px !important;
+    }
+
+    /* --- ここからゲーム画面（高さ500px以下用）の調整 --- */
+    
+    /* 上下のレーンを薄くする */
+    .target-lane {
+        height: 60px !important;
+        font-size: 16px !important;
+    }
+    .key-badge {
+        font-size: 12px !important;
+        padding: 2px 6px !important;
+        margin-right: 6px !important;
+    }
+
+    /* コンベアベルトの高さを縮小し、中央に収める */
+    .conveyor-belt {
+        height: 120px !important;
+        border-top-width: 6px !important;
+        border-bottom-width: 6px !important;
+    }
+
+    /* ヘルパー情報（スコア・残り時間など）がベルトと重ならないように位置とサイズを調整 */
+    #header-info {
+        top: 65px !important;
+        left: 10px !important;
+        right: 10px !important;
+    }
+    .info-card {
+        font-size: 13px !important;
+        padding: 4px 8px !important;
+        border-radius: 10px !important;
+    }
+
+    /* 寿司の文字やキャラクターを小さくする */
+    #sushi-word {
+        font-size: 24px !important;
+        padding: 6px 16px !important;
+        border-width: 2px !important;
+        margin-bottom: 2px !important;
+    }
+    #sushi-word rt {
+        font-size: 14px !important;
+    }
+    .sushi-character-img {
+        width: 70px !important;
+        height: 45px !important;
+    }
+
+    /* 音声ゲーム画面のヘッダー・寿司コンテナ調整 */
+    #voice-header-info {
+        top: 10px !important;
+        left: 10px !important;
+        right: 10px !important;
+    }
+    #voice-sushi-word {
+        font-size: 24px !important;
+        padding: 8px 16px !important;
+    }
+    #voice-status-hint {
+        font-size: 13px !important;
+        margin-top: 8px !important;
+        padding: 4px 10px !important;
     }
 }
 #game-over-modal.show { opacity: 1; pointer-events: auto; }
