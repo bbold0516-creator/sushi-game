@@ -70,7 +70,7 @@ body.theme-pixel {
 /* 画面全体の基本スタイル（スマホでの選択・ズーム誤作動を防止） */
 body {
     margin: 0; padding: 0; overflow: hidden; 
-    background-color: var(--bg-color); height: 100vh;
+    background-color: var(--bg-color); height: 100dvh;
     font-family: 'Helvetica Neue', Arial, sans-serif;
     transition: background-color 0.5s ease; color: var(--text-color);
     -webkit-touch-callout: none;
@@ -92,7 +92,7 @@ body.theme-pixel .btn {
 }
 
 .screen {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100dvh;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     z-index: 100; transition: opacity 0.3s;
     box-sizing: border-box;
@@ -393,6 +393,53 @@ body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg, body.theme-pixel
     display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s;
     padding: 15px;
     box-sizing: border-box;
+}
+
+/* ==========================================
+   スマホの横画面など高さが小さい場合 (max-height: 500px)
+   ========================================== */
+@media (max-height: 500px) {
+    .home-title-card {
+        padding: 10px 20px;
+        margin-bottom: 10px;
+    }
+    .home-mascot {
+        width: 50px;
+        height: 35px;
+        margin-bottom: 2px;
+    }
+    .title {
+        font-size: 28px !important;
+    }
+    /* スコアカード部分をコンパクトにする */
+    .home-title-card div[style*="display: flex"] {
+        margin-top: 6px !important;
+        gap: 8px !important;
+    }
+    .home-title-card div[style*="background: rgba"] {
+        padding: 6px 10px !important;
+    }
+    .home-title-card div[style*="font-size: 13px"],
+    .home-title-card div[style*="font-size: 14px"] {
+        font-size: 10px !important;
+        margin-bottom: 2px !important;
+    }
+    .home-title-card div[style*="font-size: min"] {
+        font-size: 15px !important;
+    }
+
+    /* スタートボタンとマイストアボタンを横並びにする */
+    #home-screen .home-btn-group {
+        flex-direction: row !important;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+    #home-screen .home-btn-group .btn {
+        padding: 8px 16px !important;
+        font-size: 13px !important;
+        margin: 2px !important;
+    }
 }
 #game-over-modal.show { opacity: 1; pointer-events: auto; }
 .modal-content { background: var(--panel-bg); color: var(--panel-text); padding: 35px 25px; border-radius: 25px; text-align: center; border: 2px solid rgba(255,255,255,0.2); width: 90%; max-width: 380px; box-sizing: border-box; }
