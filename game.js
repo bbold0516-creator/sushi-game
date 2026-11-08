@@ -1,8 +1,14 @@
 // --- データ管理 ---
 let currentLang = localStorage.getItem('sushiGameLang') || 'ja';
+
+// フリックモード用ハイスコア
 let stageHighScores = JSON.parse(localStorage.getItem('sushiGameStageScores')) || [0, 0, 0, 0, 0];
 let customStages = JSON.parse(localStorage.getItem('sushiGameCustomStages')) || [];
 let customStageHighScores = JSON.parse(localStorage.getItem('sushiGameCustomStageScores')) || {};
+
+// 音声認識モード用ハイスコア（個別管理）
+let voiceStageHighScores = JSON.parse(localStorage.getItem('sushiGameVoiceStageScores')) || [0, 0, 0, 0, 0];
+let voiceCustomStageHighScores = JSON.parse(localStorage.getItem('sushiGameVoiceCustomStageScores')) || {};
 
 let activeThemeId = localStorage.getItem('sushiGameTheme') || 'theme-default';
 let showHint = localStorage.getItem('sushiGameHint') !== 'false';
@@ -16,6 +22,37 @@ let feverTurns = 0;
 let isWaitingForTutorial = false;
 
 document.body.className = activeThemeId;
+
+// --- 外部定義された themes（words.js等）のモード・アンロック条件を安全に上書き・追加 ---
+if (typeof themes !== 'undefined') {
+    themes.forEach(theme => {
+        if (theme.id === 'theme-default') {
+            theme.unlockScore = 0; 
+            theme.mode = 'flick';
+        } else if (theme.id === 'theme-wood') {
+            theme.unlockScore = 500;
+            theme.mode = 'flick'; 
+        } else if (theme.id === 'theme-pixel') {
+            theme.unlockScore = 2500; // フリックモードの合計スコアで2500点
+            theme.mode = 'flick'; 
+        } else if (theme.id === 'theme-neon') {
+            theme.unlockScore = 1000;
+            theme.mode = 'voice'; 
+        } else if (theme.id === 'theme-gold') {
+            theme.unlockScore = 1500;
+            theme.mode = 'voice'; 
+        }
+    });
+
+    if (!themes.some(t => t.id === 'theme-pixel')) {
+        themes.push({
+            id: 'theme-pixel',
+            unlockScore: 2500,
+            mode: 'flick',
+            color: '#00ffcc'
+        });
+    }
+}
 
 // --- 音声ボイスの選択・設定ロジック ---
 let selectedJapaneseVoice = null;
@@ -78,8 +115,15 @@ function speakJapanese(text, force = false) {
     }
 }
 
-function getTotalBestScore() {
-    return stageHighScores.reduce((sum, score) => sum + score, 0);
+function getTotalBestScore(mode = 'flick') {
+    if (mode === 'voice') {
+        const standardTotal = voiceStageHighScores.reduce((sum, score) => sum + score, 0);
+        const customTotal = Object.values(voiceCustomStageHighScores).reduce((sum, score) => sum + score, 0);
+        return standardTotal + customTotal;
+    }
+    const standardTotal = stageHighScores.reduce((sum, score) => sum + score, 0);
+    const customTotal = Object.values(customStageHighScores).reduce((sum, score) => sum + score, 0);
+    return standardTotal + customTotal;
 }
 
 // --- 画面要素 ---
@@ -98,7 +142,8 @@ const gameOverModal = document.getElementById('game-over-modal');
 const tutorialOverlay = document.getElementById('tutorial-overlay');
 const homeKanjiBg = document.getElementById('home-kanji-bg');
 
-const homeTotalScore = document.getElementById('home-total-score');
+const homeFlickTotalScore = document.getElementById('home-flick-total-score');
+const homeVoiceTotalScore = document.getElementById('home-voice-total-score');
 const storeTotalScore = document.getElementById('store-total-score');
 const newRecordMsg = document.getElementById('new-record-msg');
 
@@ -178,7 +223,8 @@ function updateSettingsButtonText() {
     document.getElementById('toggle-voice-btn').textContent = `${t.voiceLabel}: ${enableVoice ? t.on : t.off}`;
 }
 
-homeTotalScore.textContent = getTotalBestScore();
+if (homeFlickTotalScore) homeFlickTotalScore.textContent = getTotalBestScore('flick');
+if (homeVoiceTotalScore) homeVoiceTotalScore.textContent = getTotalBestScore('voice');
 applyLanguage();
 
 function renderStages() {
@@ -191,7 +237,10 @@ function renderStages() {
         btn.className = `selection-btn btn-stage ${currentStageIndex === index ? 'active' : ''}`;
         const stageName = t.stages[index];
         const stageLabelPrefix = currentLang === 'ja' ? `ステージ ${index + 1}: ` : `Stage ${index + 1}: `;
-        const bestScoreForStage = stageHighScores[index] || 0;
+        
+        const bestScoreForStage = (currentGameMode === 'voice') 
+            ? (voiceStageHighScores[index] || 0) 
+            : (stageHighScores[index] || 0);
         
         btn.innerHTML = `
             <span>${stageLabelPrefix}${stageName}</span>
@@ -209,7 +258,10 @@ function renderStages() {
         const stageKey = `custom_${customStage.id}`;
         const btn = document.createElement('button');
         btn.className = `selection-btn custom-stage-btn ${currentStageIndex === stageKey ? 'active' : ''}`;
-        const bestScore = customStageHighScores[customStage.id] || 0;
+        
+        const bestScore = (currentGameMode === 'voice')
+            ? (voiceCustomStageHighScores[customStage.id] || 0)
+            : (customStageHighScores[customStage.id] || 0);
 
         btn.innerHTML = `
             <span>⭐ ${customStage.name}</span>
@@ -225,8 +277,10 @@ function renderStages() {
             if (confirm(`「${customStage.name}」を削除しますか？`)) {
                 customStages.splice(cIndex, 1);
                 delete customStageHighScores[customStage.id];
+                delete voiceCustomStageHighScores[customStage.id];
                 localStorage.setItem('sushiGameCustomStages', JSON.stringify(customStages));
                 localStorage.setItem('sushiGameCustomStageScores', JSON.stringify(customStageHighScores));
+                localStorage.setItem('sushiGameVoiceCustomStageScores', JSON.stringify(voiceCustomStageHighScores));
                 renderStages();
             }
         };
@@ -242,39 +296,45 @@ function renderStages() {
 }
 
 function renderStore() {
-    const totalScore = getTotalBestScore();
-    storeTotalScore.textContent = totalScore;
+    const totalScoreFlick = getTotalBestScore('flick');
+    if (storeTotalScore) storeTotalScore.textContent = totalScoreFlick;
+    
     const container = document.getElementById('theme-list-container');
     container.innerHTML = '';
     const t = i18n[currentLang];
 
-    themes.forEach((theme, index) => {
-        const btn = document.createElement('button');
-        const requiredTotalScore = theme.unlockScore * 5;
-        const isUnlocked = totalScore >= requiredTotalScore;
-        const themeName = t.themes[index];
-        
-        if (isUnlocked) {
-            btn.className = `selection-btn ${activeThemeId === theme.id ? 'active' : ''}`;
-            btn.style.backgroundColor = theme.color;
-            const appliedText = currentLang === 'ja' ? ' (適用中)' : ' (Applied)';
-            const changeText = currentLang === 'ja' ? 'に変更' : ' Apply';
-            btn.textContent = activeThemeId === theme.id ? `✅ ${themeName}${appliedText}` : `✨ ${themeName}${changeText}`;
+    if (typeof themes !== 'undefined') {
+        themes.forEach((theme, index) => {
+            const btn = document.createElement('button');
+            const requiredTotalScore = theme.unlockScore;
             
-            btn.onclick = () => {
-                document.body.className = theme.id;
-                activeThemeId = theme.id;
-                localStorage.setItem('sushiGameTheme', activeThemeId);
-                renderStore();
-            };
-        } else {
-            btn.className = 'selection-btn';
-            btn.disabled = true;
-            btn.style.backgroundColor = '#9e9e9e';
-            btn.textContent = `🔒 ${themeName} (${t.unlockLabel}${requiredTotalScore}${t.unlockSuffix})`;
-        }
-        container.appendChild(btn);
-    });
+            const currentModeScore = getTotalBestScore(theme.mode || 'flick');
+            const isUnlocked = currentModeScore >= requiredTotalScore;
+            const themeName = t.themes && t.themes[index] ? t.themes[index] : theme.id;
+            
+            if (isUnlocked) {
+                btn.className = `selection-btn ${activeThemeId === theme.id ? 'active' : ''}`;
+                btn.style.backgroundColor = theme.color || '#d32f2f';
+                const appliedText = currentLang === 'ja' ? ' (適用中)' : ' (Applied)';
+                const changeText = currentLang === 'ja' ? 'に変更' : ' Apply';
+                btn.textContent = activeThemeId === theme.id ? `✅ ${themeName}${appliedText}` : `✨ ${themeName}${changeText}`;
+                
+                btn.onclick = () => {
+                    document.body.className = theme.id;
+                    activeThemeId = theme.id;
+                    localStorage.setItem('sushiGameTheme', activeThemeId);
+                    renderStore();
+                };
+            } else {
+                btn.className = 'selection-btn';
+                btn.disabled = true;
+                btn.style.backgroundColor = '#9e9e9e';
+                const modeNameLabel = theme.mode === 'voice' ? (currentLang === 'ja' ? '音声モード' : 'Voice') : (currentLang === 'ja' ? 'フリックモード' : 'Flick');
+                btn.textContent = `🔒 ${themeName} (${t.unlockLabel}${requiredTotalScore} [${modeNameLabel}]${t.unlockSuffix})`;
+            }
+            container.appendChild(btn);
+        });
+    }
 }
 
 function showScreen(screen) {
@@ -294,7 +354,8 @@ function showScreen(screen) {
 
     if (screen === homeScreen) {
         homeKanjiBg.style.display = 'block';
-        homeTotalScore.textContent = getTotalBestScore();
+        if (homeFlickTotalScore) homeFlickTotalScore.textContent = getTotalBestScore('flick');
+        if (homeVoiceTotalScore) homeVoiceTotalScore.textContent = getTotalBestScore('voice');
     } else {
         homeKanjiBg.style.display = 'none';
     }
@@ -322,6 +383,7 @@ document.getElementById('go-store-btn').addEventListener('click', () => showScre
 document.getElementById('goto-zukan-btn').addEventListener('click', () => showScreen(zukanScreen));
 document.getElementById('goto-setting-btn').addEventListener('click', () => showScreen(settingScreen));
 document.getElementById('goto-lang-screen-btn').addEventListener('click', () => showScreen(langScreen));
+document.getElementById('goto-create-stage-btn').addEventListener('click', () => showScreen(createStageScreen));
 
 document.getElementById('mode-back-btn').addEventListener('click', () => showScreen(homeScreen));
 document.getElementById('stage-back-btn').addEventListener('click', () => showScreen(modeSelectScreen));
@@ -332,7 +394,8 @@ document.getElementById('setting-back-btn').addEventListener('click', () => show
 document.getElementById('lang-back-btn').addEventListener('click', () => showScreen(settingScreen));
 
 document.getElementById('modal-home-btn').addEventListener('click', () => {
-    homeTotalScore.textContent = getTotalBestScore();
+    if (homeFlickTotalScore) homeFlickTotalScore.textContent = getTotalBestScore('flick');
+    if (homeVoiceTotalScore) homeVoiceTotalScore.textContent = getTotalBestScore('voice');
     stopVoiceRecognition();
     showScreen(homeScreen);
 });
@@ -408,17 +471,24 @@ document.getElementById('reset-record-btn').addEventListener('click', () => {
     if (confirm(t.resetConfirm)) {
         localStorage.removeItem('sushiGameStageScores');
         localStorage.removeItem('sushiGameCustomStageScores');
+        localStorage.removeItem('sushiGameVoiceStageScores');
+        localStorage.removeItem('sushiGameVoiceCustomStageScores');
         localStorage.removeItem('sushiGameTheme');
         localStorage.removeItem('sushiGameHint');
         localStorage.removeItem('sushiGameVoice');
         localStorage.removeItem('sushiGameWrongWords');
+        
         stageHighScores = [0, 0, 0, 0, 0];
         customStageHighScores = {};
+        voiceStageHighScores = [0, 0, 0, 0, 0];
+        voiceCustomStageHighScores = {};
+        
         activeThemeId = 'theme-default';
         showHint = true;
         enableVoice = true;
         document.body.className = activeThemeId;
-        homeTotalScore.textContent = getTotalBestScore();
+        if (homeFlickTotalScore) homeFlickTotalScore.textContent = getTotalBestScore('flick');
+        if (homeVoiceTotalScore) homeVoiceTotalScore.textContent = getTotalBestScore('voice');
         updateSettingsButtonText();
         alert(t.resetDone);
     }
@@ -506,8 +576,10 @@ let activeWordList = [];
 function updateFeverUI() {
     if (feverTurns > 0) {
         gameScreen.classList.add('fever-lane');
+        voiceGameScreen.classList.add('fever-lane');
     } else {
         gameScreen.classList.remove('fever-lane');
+        voiceGameScreen.classList.remove('fever-lane');
     }
 }
 
@@ -609,6 +681,7 @@ function handleSuccess() {
         feverTurns = 3;
         timeLeft += 3;
         timeDisplay.textContent = timeLeft;
+        voiceTimeDisplay.textContent = timeLeft;
         updateFeverUI();
     }
 
@@ -618,8 +691,13 @@ function handleSuccess() {
         points *= 2;
     }
 
-    currentScore += points;
-    scoreDisplay.textContent = currentScore;
+    if (currentGameMode === 'voice') {
+        voiceCurrentScore += points;
+        voiceScoreDisplay.textContent = voiceCurrentScore;
+    } else {
+        currentScore += points;
+        scoreDisplay.textContent = currentScore;
+    }
 
     const t = i18n[currentLang];
     let msg = isFever ? `${t.fever} (+${points})` : `${t.success} (+${points})`;
@@ -635,8 +713,9 @@ function handleSuccess() {
 function handleMiss() {
     successStreak = 0;
     const t = i18n[currentLang];
-    if (currentCorrectWord) {
-        recordWrongWord(currentCorrectWord);
+    const targetWord = (currentGameMode === 'voice') ? currentVoiceWord : currentCorrectWord;
+    if (targetWord) {
+        recordWrongWord(targetWord);
     }
 
     if (feverTurns > 0) {
@@ -644,10 +723,15 @@ function handleMiss() {
         feverTurns--;
         updateFeverUI();
     } else {
-        currentScore = Math.max(0, currentScore - 50);
+        if (currentGameMode === 'voice') {
+            voiceCurrentScore = Math.max(0, voiceCurrentScore - 50);
+            voiceScoreDisplay.textContent = voiceCurrentScore;
+        } else {
+            currentScore = Math.max(0, currentScore - 50);
+            scoreDisplay.textContent = currentScore;
+        }
         showMessage(t.miss, "miss", false);
     }
-    scoreDisplay.textContent = currentScore;
 }
 
 function sortSushi(direction) {
@@ -665,42 +749,71 @@ function sortSushi(direction) {
 }
 
 function showMessage(text, type, isRainbow = false) {
-    resultMessage.textContent = text;
-    resultMessage.className = `${type} show`;
+    const targetMsgEl = (currentGameMode === 'voice') ? voiceResultMessage : resultMessage;
+    targetMsgEl.textContent = text;
+    targetMsgEl.className = `${type} show`;
     if (isRainbow) {
-        resultMessage.classList.add('fever-rainbow');
+        targetMsgEl.classList.add('fever-rainbow');
     } else {
-        resultMessage.classList.remove('fever-rainbow');
+        targetMsgEl.classList.remove('fever-rainbow');
     }
     setTimeout(() => { 
-        resultMessage.className = ""; 
+        targetMsgEl.className = ""; 
     }, 400);
 }
 
 function endGame() {
     isGameOver = true;
-    clearInterval(timerId);
+    if (timerId) clearInterval(timerId);
+    if (voiceTimerId) clearInterval(voiceTimerId);
     feverTurns = 0;
     updateFeverUI();
-    document.getElementById('final-score').textContent = currentScore;
+
     const t = i18n[currentLang];
-    
-    if (typeof currentStageIndex === 'string' && currentStageIndex.startsWith('custom_')) {
-        const cId = parseInt(currentStageIndex.replace('custom_', ''));
-        if (currentScore > (customStageHighScores[cId] || 0)) {
-            customStageHighScores[cId] = currentScore;
-            localStorage.setItem('sushiGameCustomStageScores', JSON.stringify(customStageHighScores));
-            newRecordMsg.textContent = t.newRecord;
+
+    if (currentGameMode === 'voice') {
+        const finalScore = voiceCurrentScore;
+        document.getElementById('final-score').textContent = finalScore;
+
+        if (typeof currentStageIndex === 'string' && currentStageIndex.startsWith('custom_')) {
+            const cId = parseInt(currentStageIndex.replace('custom_', ''));
+            if (finalScore > (voiceCustomStageHighScores[cId] || 0)) {
+                voiceCustomStageHighScores[cId] = finalScore;
+                localStorage.setItem('sushiGameVoiceCustomStageScores', JSON.stringify(voiceCustomStageHighScores));
+                newRecordMsg.textContent = t.newRecord;
+            } else {
+                newRecordMsg.textContent = "";
+            }
         } else {
-            newRecordMsg.textContent = "";
+            if (finalScore > (voiceStageHighScores[currentStageIndex] || 0)) {
+                voiceStageHighScores[currentStageIndex] = finalScore;
+                localStorage.setItem('sushiGameVoiceStageScores', JSON.stringify(voiceStageHighScores));
+                newRecordMsg.textContent = t.newRecord;
+            } else {
+                newRecordMsg.textContent = "";
+            }
         }
     } else {
-        if (currentScore > (stageHighScores[currentStageIndex] || 0)) {
-            stageHighScores[currentStageIndex] = currentScore;
-            localStorage.setItem('sushiGameStageScores', JSON.stringify(stageHighScores));
-            newRecordMsg.textContent = t.newRecord;
+        const finalScore = currentScore;
+        document.getElementById('final-score').textContent = finalScore;
+
+        if (typeof currentStageIndex === 'string' && currentStageIndex.startsWith('custom_')) {
+            const cId = parseInt(currentStageIndex.replace('custom_', ''));
+            if (finalScore > (customStageHighScores[cId] || 0)) {
+                customStageHighScores[cId] = finalScore;
+                localStorage.setItem('sushiGameCustomStageScores', JSON.stringify(customStageHighScores));
+                newRecordMsg.textContent = t.newRecord;
+            } else {
+                newRecordMsg.textContent = "";
+            }
         } else {
-            newRecordMsg.textContent = "";
+            if (finalScore > (stageHighScores[currentStageIndex] || 0)) {
+                stageHighScores[currentStageIndex] = finalScore;
+                localStorage.setItem('sushiGameStageScores', JSON.stringify(stageHighScores));
+                newRecordMsg.textContent = t.newRecord;
+            } else {
+                newRecordMsg.textContent = "";
+            }
         }
     }
     
@@ -725,14 +838,13 @@ update();
 window.addEventListener('keydown', (e) => {
     if (currentGameMode !== 'flick' || isGameOver || isWaitingForTutorial) return;
     if (e.key === 'ArrowUp') { e.preventDefault(); sortSushi('top'); }
-    if (e.key === 'ArrowDown') { e.preventDefault(); sortSushi('down'); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); sortSushi('bottom'); }
 });
 
 
 // ==========================================
 // B. 音声発話（ボイス）モード ロジック
 // ==========================================
-const voiceGameContainer = document.getElementById('voice-game-screen');
 const voiceScoreDisplay = document.getElementById('voice-score');
 const voiceTimeDisplay = document.getElementById('voice-time');
 const voiceStageNameDisplay = document.getElementById('voice-current-stage-name');
@@ -749,21 +861,25 @@ let voiceActiveWordList = [];
 let currentVoiceWord = null;
 let recognition = null;
 let isVoiceGameActive = false;
-let isVoiceAnimating = false; // アニメーション中フラグ
+let isVoiceAnimating = false;
 
 function startVoiceGame() {
     showScreen(voiceGameScreen);
     voiceCurrentScore = 0;
-    voiceTimeLeft = 30;
+    voiceTimeLeft = GAME_TIME;
     isVoiceGameActive = false;
     isVoiceAnimating = false;
     isGameOver = false;
     lastWordIndex = -1;
+    successStreak = 0;
+    feverTurns = 0;
+    updateFeverUI();
 
     voiceScoreDisplay.textContent = voiceCurrentScore;
     voiceTimeDisplay.textContent = voiceTimeLeft;
     voiceStageNameDisplay.textContent = getStageTitleText();
     voiceActiveWordList = getActiveWordList();
+    newRecordMsg.textContent = "";
 
     if (voiceTimerId) clearInterval(voiceTimerId);
     voiceTimerId = setInterval(() => {
@@ -795,22 +911,18 @@ function setNextVoiceQuestion() {
 
     playWordAudio(currentVoiceWord);
 
-    // 通常表示に戻す（ルビに日本語）
     voiceRomajiSpan.textContent = currentVoiceWord.romaji || currentVoiceWord.hiragana;
     voiceHiraganaSpan.textContent = currentVoiceWord.hiragana;
 
-    // 【ご要望対応】「speak into the mic」の次に出る部分を日本語ではなくローマ字に変更
     const t = i18n[currentLang];
     const displayRomaji = currentVoiceWord.romaji || currentVoiceWord.hiragana;
     voiceStatusHint.textContent = `${t.voiceHintPrompt} 「${displayRomaji}」`;
 
-    // 寿司を右側の画面外から真ん中へスライドインさせる準備
     voiceSushiContainer.style.transition = 'none';
     voiceSushiContainer.style.left = '150vw';
     voiceSushiContainer.style.transform = 'translate(-50%, -50%)';
     voiceSushiContainer.style.opacity = '0';
 
-    // 強制再描画後に中央へアニメーション移動
     void voiceSushiContainer.offsetWidth;
     voiceSushiContainer.style.transition = 'left 0.4s ease-out, opacity 0.4s ease-out';
     voiceSushiContainer.style.left = '50%';
@@ -881,24 +993,21 @@ function checkVoiceAnswer(spokenText) {
 
     const isCorrect = cleanSpoken.includes(targetJa) || 
                       (targetSpeak && cleanSpoken.includes(targetSpeak)) || 
-                      (targetRomaji && cleanSpoken.includes(targetRomaji));
+                      (targetRomaji && cleanSpogen.includes(targetRomaji)); // (修正部分含む)
 
     if (isCorrect) {
         isVoiceGameActive = false;
         isVoiceAnimating = true;
-        voiceCurrentScore += 20;
-        voiceScoreDisplay.textContent = voiceCurrentScore;
 
-        // ローマ字の下にある日本語（ルビ部分）を英語に変わるようにする
+        handleSuccess();
+
         voiceRomajiSpan.textContent = currentVoiceWord.romaji || currentVoiceWord.hiragana;
         voiceHiraganaSpan.textContent = `✨ ${currentVoiceWord.english} ✨`;
 
         voiceStatusHint.textContent = `正解！🎉`;
         
-        // 【ご要望対応】SUCCESS! の下に出る英語を SUCCESS! と同じくらいの大きさ（72px）に変更
         showVoiceSuccessMessage(currentVoiceWord.english);
 
-        // 成功したら寿司が左側に流れて画面外へ行く
         voiceSushiContainer.style.transition = 'left 0.4s ease-in, opacity 0.4s ease-in';
         voiceSushiContainer.style.left = '-50vw';
         voiceSushiContainer.style.opacity = '0';
@@ -911,7 +1020,6 @@ function checkVoiceAnswer(spokenText) {
     }
 }
 
-// 音声認識専用のSUCCESSメッセージ表示関数（英語のサイズを大サイズに）
 function showVoiceSuccessMessage(englishWord) {
     voiceResultMessage.innerHTML = `SUCCESS!<br><span style="font-size: 72px; color: #ffccbc;">${englishWord}</span>`;
     voiceResultMessage.className = `success show`;

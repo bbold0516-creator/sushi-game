@@ -7,7 +7,7 @@ const i18n = {
         zukanBtn: "図鑑 📖",
         settingBtn: "設定 ⚙️",
         modeSelectTitle: "モード選択",
-        modeFlick: "フリック（通常）モード 👆",
+        modeFlick: "フリックモード 👆",
         modeVoice: "音声発話モード 🗣️",
         backModeSelect: "モード選択に戻る",
         stageSelect: "ステージ選択",
@@ -60,7 +60,7 @@ const i18n = {
         unlockSuffix: " で解放",
         speakBtn: "🔊 発音を聞く",
         voiceHintPrompt: "🎤 マイクで発音してね...",
-        themes: ["スタンダード", "和風・高級木目", "サイバーネオン", "プレミアムゴールド"],
+        themes: ["スタンダード", "和風・高級木目", "ドット絵・8bit風", "サイバーネオン", "プレミアムゴールド"],
         stages: ["あいさつ・基本", "生き物", "食べ物", "ランダム", "リトライ"]
     },
     en: {
@@ -123,7 +123,7 @@ const i18n = {
         unlockSuffix: "",
         speakBtn: "🔊 Pronunciation",
         voiceHintPrompt: "🎤 Speak into the mic...",
-        themes: ["Standard", "Japanese Wood", "Cyber Neon", "Premium Gold"],
+        themes: ["Standard", "Japanese Wood", "Pixel 8-bit", "Cyber Neon", "Premium Gold"],
         stages: ["Greetings", "Animals", "Foods", "Random", "Retry"]
     }
 };
@@ -199,8 +199,9 @@ const defaultStagesData = [
 
 // --- テーマデータ ---
 const themes = [
-    { id: 'theme-default', unlockScore: 0, color: '#d32f2f' },
-    { id: 'theme-wood', unlockScore: 500, color: '#795548' },
-    { id: 'theme-neon', unlockScore: 1000, color: '#00BCD4' },
-    { id: 'theme-gold', unlockScore: 1500, color: '#FFC107' }
+    { id: 'theme-default', unlockScore: 0, color: '#d32f2f', mode: 'flick' },
+    { id: 'theme-wood', unlockScore: 500, color: '#795548', mode: 'flick' },
+    { id: 'theme-pixel', unlockScore: 2500, color: '#00ffcc', mode: 'flick' }, // フリック合計2500点で解放
+    { id: 'theme-neon', unlockScore: 1000, color: '#00BCD4', mode: 'voice' },
+    { id: 'theme-gold', unlockScore: 1500, color: '#FFC107', mode: 'voice' }
 ];

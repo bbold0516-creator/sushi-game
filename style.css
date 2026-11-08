@@ -53,12 +53,45 @@ body.theme-gold {
     --text-color: #ffd700;
 }
 
+body.theme-pixel {
+    --bg-color: #12121c;
+    --panel-bg: #1f1f30;
+    --panel-text: #00ffcc;
+    --btn-primary: #ff00ff;
+    --btn-hover: #d000d0;
+    --belt-bg: #09090f;
+    --belt-line1: #1a1a2e;
+    --belt-line2: #e94560;
+    --guard-color: #00ffcc;
+    --text-color: #00ffcc;
+}
+
 /* 画面全体の基本スタイル */
 body {
     margin: 0; padding: 0; overflow: hidden; 
     background-color: var(--bg-color); height: 100vh;
     font-family: 'Helvetica Neue', Arial, sans-serif;
     transition: background-color 0.5s ease; color: var(--text-color);
+}
+
+body.theme-pixel {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body.theme-pixel .panel,
+body.theme-pixel .home-title-card,
+body.theme-pixel .modal-content {
+    box-shadow: 4px 4px 0px #00ffcc;
+    border: 3px solid #ff00ff;
+}
+
+body.theme-pixel .btn {
+    box-shadow: 3px 3px 0px #00ffcc;
+    border: 2px solid #ffffff;
+}
+body.theme-pixel .btn:active:not(:disabled) {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0px #00ffcc;
 }
 
 .screen {
@@ -85,7 +118,7 @@ body {
     user-select: none;
     line-height: 1;
 }
-body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg {
+body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg, body.theme-pixel #home-kanji-bg {
     color: rgba(255, 255, 255, 0.06);
 }
 

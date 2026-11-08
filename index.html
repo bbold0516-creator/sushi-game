@@ -40,11 +40,23 @@
 
     <!-- 1. ホーム画面 -->
     <div id="home-screen" class="screen">
-        <div class="home-title-card">
+        <div class="home-title-card" style="max-width: 580px; width: 90%;">
             <svg class="home-mascot"><use href="#sushi-character"/></svg>
-            <div class="title">sushi go round</div>
-            <div class="subtitle"><span data-i18n="totalBestScore">合計ベストスコア</span>: <span id="home-total-score">0</span></div>
+            <div class="title" style="font-size: 52px;">sushi go round</div>
+            
+            <!-- 左右分割＆大きめ文字のスコア表示エリア -->
+            <div style="display: flex; justify-content: center; gap: 15px; margin-top: 15px; width: 100%;">
+                <div style="background: rgba(0, 0, 0, 0.15); padding: 12px 15px; border-radius: 15px; flex: 1; text-align: center; border: 1px solid rgba(255,255,255,0.25);">
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 4px; font-weight: bold;">👆 フリック合計</div>
+                    <div style="font-size: 28px; font-weight: bold; color: #ffccbc;"><span id="home-flick-total-score">0</span></div>
+                </div>
+                <div style="background: rgba(0, 0, 0, 0.15); padding: 12px 15px; border-radius: 15px; flex: 1; text-align: center; border: 1px solid rgba(255,255,255,0.25);">
+                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 4px; font-weight: bold;">🗣️ 音声発話合計</div>
+                    <div style="font-size: 28px; font-weight: bold; color: #ffccbc;"><span id="home-voice-total-score">0</span></div>
+                </div>
+            </div>
         </div>
+
         <div style="position: relative; z-index: 20;">
             <button id="goto-mode-select-btn" class="btn btn-stage" data-i18n="stageBtn">スタート 🎮</button>
             <button id="go-store-btn" class="btn btn-store" data-i18n="storeBtn">マイストア 🛒</button>
@@ -59,7 +71,7 @@
         <div class="panel">
             <h2 style="margin: 0 0 20px 0; font-size: 28px;" data-i18n="modeSelectTitle">モード選択</h2>
             <div class="selection-list">
-                <button id="mode-flick-btn" class="selection-btn" style="background-color: #d32f2f;" data-i18n="modeFlick">フリック（通常）モード 👆</button>
+                <button id="mode-flick-btn" class="selection-btn" style="background-color: #d32f2f;" data-i18n="modeFlick">フリックモード 👆</button>
                 <button id="mode-voice-speech-btn" class="selection-btn" style="background-color: #00796b;" data-i18n="modeVoice">音声発話モード 🗣️</button>
             </div>
             <button id="mode-back-btn" class="btn btn-back" style="padding: 12px 30px; font-size: 20px; margin-top: 10px;" data-i18n="backHome">ホームに戻る</button>
@@ -82,12 +94,12 @@
             <h2 style="margin: 0 0 15px 0; font-size: 26px;" data-i18n="createStageTitle">ステージ新規作成</h2>
             
             <div class="form-group">
-                <label data-i18n="stageNameLabel">ステージの名前</label>
+                <label for="custom-stage-name" data-i18n="stageNameLabel">ステージの名前</label>
                 <input type="text" id="custom-stage-name" class="form-input" data-i18n-placeholder="stageNamePlaceholder" placeholder="例: 果物ステージ">
             </div>
 
             <div class="form-group">
-                <label data-i18n="wordListLabel">単語リスト (1行に1つの単語ペア)</label>
+                <label for="custom-stage-words" data-i18n="wordListLabel">単語リスト (1行に1つの単語ペア)</label>
                 <textarea id="custom-stage-words" class="form-textarea" data-i18n-placeholder="wordListPlaceholder" placeholder="日本語, English&#10;例:&#10;もも, Peach&#10;ぶどう, Grape"></textarea>
                 <div style="font-size: 12px; opacity: 0.7; margin-top: 4px;" data-i18n="wordListHint">※カンマ(,)で区切って「日本語, 英語」の形式で入力してください。</div>
             </div>
