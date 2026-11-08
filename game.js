@@ -9,6 +9,7 @@ let showHint = localStorage.getItem('sushiGameHint') !== 'false';
 let enableVoice = localStorage.getItem('sushiGameVoice') !== 'false';
 
 let currentStageIndex = 0;
+let currentGameMode = 'flick'; // 'flick' または 'voice'
 let lastWordIndex = -1;
 let successStreak = 0;
 let feverTurns = 0; 
@@ -24,20 +25,13 @@ function updateJapaneseVoices() {
         const voices = window.speechSynthesis.getVoices();
         const japaneseVoices = voices.filter(v => v.lang === 'ja-JP' || v.lang.startsWith('ja'));
 
-        // 優先順位:
-        // 1. 名前に Nanami と Natural を含む声
         let targetVoice = japaneseVoices.find(v => v.name.includes('Nanami') && v.name.includes('Natural'));
-
-        // 2. Google 日本語
         if (!targetVoice) {
             targetVoice = japaneseVoices.find(v => v.name.includes('Google 日本語') || v.name.includes('Google Japanese'));
         }
-
-        // 3. それ以外の日本語の声
         if (!targetVoice && japaneseVoices.length > 0) {
             targetVoice = japaneseVoices[0];
         }
-
         selectedJapaneseVoice = targetVoice || null;
     }
 }
@@ -50,11 +44,9 @@ if ('speechSynthesis' in window) {
 // --- 音声ファイル再生の管理用変数 ---
 let currentAudio = null;
 
-// 音声ファイルを再生し、失敗した場合は speechSynthesis にフォールバックする関数
 function playWordAudio(word, force = false) {
     if (!enableVoice && !force) return;
 
-    // 前の音が鳴っていれば止める
     if (currentAudio) {
         currentAudio.pause();
         currentAudio.currentTime = 0;
@@ -67,21 +59,18 @@ function playWordAudio(word, force = false) {
     currentAudio = audio;
 
     audio.play().then(() => {
-        // 再生成功
     }).catch((error) => {
-        // ファイルが見つからない等の場合は従来の speechSynthesis で読み上げ
         currentAudio = null;
         speakJapanese(speakText, force);
     });
 }
 
-// --- 音声発話関数 (Web Speech API) ---
 function speakJapanese(text, force = false) {
     if ((enableVoice || force) && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel(); 
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'ja-JP';
-        utterance.rate = 0.9; // 読み上げスピードを 0.9 に設定
+        utterance.rate = 0.9;
         if (selectedJapaneseVoice) {
             utterance.voice = selectedJapaneseVoice;
         }
@@ -95,6 +84,7 @@ function getTotalBestScore() {
 
 // --- 画面要素 ---
 const homeScreen = document.getElementById('home-screen');
+const modeSelectScreen = document.getElementById('mode-select-screen');
 const stageScreen = document.getElementById('stage-screen');
 const createStageScreen = document.getElementById('create-stage-screen');
 const storeScreen = document.getElementById('store-screen');
@@ -103,6 +93,7 @@ const zukanModal = document.getElementById('zukan-modal');
 const settingScreen = document.getElementById('setting-screen');
 const langScreen = document.getElementById('lang-screen');
 const gameScreen = document.getElementById('game-screen');
+const voiceGameScreen = document.getElementById('voice-game-screen');
 const gameOverModal = document.getElementById('game-over-modal');
 const tutorialOverlay = document.getElementById('tutorial-overlay');
 const homeKanjiBg = document.getElementById('home-kanji-bg');
@@ -170,6 +161,11 @@ function applyLanguage() {
         if (t[key]) el.textContent = t[key];
     });
 
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key]) el.placeholder = t[key];
+    });
+
     document.getElementById('lang-ja-btn').classList.toggle('active', currentLang === 'ja');
     document.getElementById('lang-en-btn').classList.toggle('active', currentLang === 'en');
     document.getElementById('modal-speak-btn').textContent = t.speakBtn;
@@ -204,7 +200,7 @@ function renderStages() {
         
         btn.onclick = () => {
             currentStageIndex = index;
-            startGame(); 
+            startSelectedMode(); 
         };
         container.appendChild(btn);
     }
@@ -238,7 +234,7 @@ function renderStages() {
 
         btn.onclick = () => {
             currentStageIndex = stageKey;
-            startGame();
+            startSelectedMode();
         };
 
         container.appendChild(btn);
@@ -283,6 +279,7 @@ function renderStore() {
 
 function showScreen(screen) {
     homeScreen.classList.add('hidden');
+    modeSelectScreen.classList.add('hidden');
     stageScreen.classList.add('hidden');
     createStageScreen.classList.add('hidden');
     storeScreen.classList.add('hidden');
@@ -291,6 +288,7 @@ function showScreen(screen) {
     settingScreen.classList.add('hidden');
     langScreen.classList.add('hidden');
     gameScreen.classList.add('hidden');
+    voiceGameScreen.classList.add('hidden');
     gameOverModal.classList.remove('show');
     screen.classList.remove('hidden');
 
@@ -309,14 +307,24 @@ function showScreen(screen) {
 
 showScreen(homeScreen);
 
-document.getElementById('goto-stage-btn').addEventListener('click', () => showScreen(stageScreen));
-document.getElementById('goto-create-stage-btn').addEventListener('click', () => showScreen(createStageScreen));
+// ボタンイベント紐付け
+document.getElementById('goto-mode-select-btn').addEventListener('click', () => showScreen(modeSelectScreen));
+document.getElementById('mode-flick-btn').addEventListener('click', () => {
+    currentGameMode = 'flick';
+    showScreen(stageScreen);
+});
+document.getElementById('mode-voice-speech-btn').addEventListener('click', () => {
+    currentGameMode = 'voice';
+    showScreen(stageScreen);
+});
+
 document.getElementById('go-store-btn').addEventListener('click', () => showScreen(storeScreen));
 document.getElementById('goto-zukan-btn').addEventListener('click', () => showScreen(zukanScreen));
 document.getElementById('goto-setting-btn').addEventListener('click', () => showScreen(settingScreen));
 document.getElementById('goto-lang-screen-btn').addEventListener('click', () => showScreen(langScreen));
 
-document.getElementById('stage-back-btn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('mode-back-btn').addEventListener('click', () => showScreen(homeScreen));
+document.getElementById('stage-back-btn').addEventListener('click', () => showScreen(modeSelectScreen));
 document.getElementById('create-back-btn').addEventListener('click', () => showScreen(stageScreen));
 document.getElementById('back-home-btn').addEventListener('click', () => showScreen(homeScreen));
 document.getElementById('zukan-back-btn').addEventListener('click', () => showScreen(homeScreen));
@@ -325,6 +333,7 @@ document.getElementById('lang-back-btn').addEventListener('click', () => showScr
 
 document.getElementById('modal-home-btn').addEventListener('click', () => {
     homeTotalScore.textContent = getTotalBestScore();
+    stopVoiceRecognition();
     showScreen(homeScreen);
 });
 
@@ -426,8 +435,60 @@ document.getElementById('lang-en-btn').addEventListener('click', () => {
     applyLanguage();
 });
 
+function startSelectedMode() {
+    if (currentGameMode === 'voice') {
+        startVoiceGame();
+    } else {
+        startGame();
+    }
+}
+
 // ==========================================
-// ゲームのロジック
+// ゲーム共通・ステージ単語取得
+// ==========================================
+function getActiveWordList() {
+    const t = i18n[currentLang];
+    if (typeof currentStageIndex === 'string' && currentStageIndex.startsWith('custom_')) {
+        const cId = parseInt(currentStageIndex.replace('custom_', ''));
+        const foundCustom = customStages.find(s => s.id === cId);
+        return foundCustom ? foundCustom.words : defaultStagesData[0].words;
+    } else if (currentStageIndex === 4) {
+        let wrongWords = JSON.parse(localStorage.getItem('sushiGameWrongWords')) || [];
+        let pool = [...wrongWords];
+        let allWords = [];
+        for (let i = 0; i < 3; i++) {
+            if(defaultStagesData[i]) allWords = allWords.concat(defaultStagesData[i].words);
+        }
+        let shuffledAll = [...allWords].sort(() => Math.random() - 0.5);
+        for (let w of shuffledAll) {
+            if (pool.length >= 18) break;
+            if (!pool.some(item => item.hiragana === w.hiragana)) pool.push(w);
+        }
+        while (pool.length < 18 && allWords.length > 0) {
+            pool.push(allWords[Math.floor(Math.random() * allWords.length)]);
+        }
+        return pool;
+    } else if (currentStageIndex === 3) {
+        let allWords = [];
+        defaultStagesData.forEach(s => allWords = allWords.concat(s.words));
+        return allWords;
+    } else {
+        return defaultStagesData[currentStageIndex].words;
+    }
+}
+
+function getStageTitleText() {
+    const t = i18n[currentLang];
+    if (typeof currentStageIndex === 'string' && currentStageIndex.startsWith('custom_')) {
+        const cId = parseInt(currentStageIndex.replace('custom_', ''));
+        const foundCustom = customStages.find(s => s.id === cId);
+        return foundCustom ? foundCustom.name : "";
+    }
+    return t.stages[currentStageIndex];
+}
+
+// ==========================================
+// A. フリック（通常）モード ロジック
 // ==========================================
 const sushiContainer = document.getElementById('sushi-container');
 const scoreDisplay = document.getElementById('score');
@@ -463,53 +524,8 @@ function startGame() {
     timeDisplay.textContent = timeLeft;
     newRecordMsg.textContent = "";
     
-    const t = i18n[currentLang];
-
-    if (typeof currentStageIndex === 'string' && currentStageIndex.startsWith('custom_')) {
-        const cId = parseInt(currentStageIndex.replace('custom_', ''));
-        const foundCustom = customStages.find(s => s.id === cId);
-        if (foundCustom) {
-            currentStageNameDisplay.textContent = foundCustom.name;
-            activeWordList = foundCustom.words;
-        } else {
-            activeWordList = defaultStagesData[0].words;
-        }
-    } else if (currentStageIndex === 4) {
-        currentStageNameDisplay.textContent = t.stages[4];
-        let wrongWords = JSON.parse(localStorage.getItem('sushiGameWrongWords')) || [];
-        let pool = [...wrongWords];
-
-        let allWords = [];
-        for (let i = 0; i < 3; i++) {
-            if(defaultStagesData[i]) {
-                allWords = allWords.concat(defaultStagesData[i].words);
-            }
-        }
-
-        let shuffledAll = [...allWords].sort(() => Math.random() - 0.5);
-
-        for (let w of shuffledAll) {
-            if (pool.length >= 18) break;
-            if (!pool.some(item => item.hiragana === w.hiragana)) {
-                pool.push(w);
-            }
-        }
-
-        while (pool.length < 18 && allWords.length > 0) {
-            let randW = allWords[Math.floor(Math.random() * allWords.length)];
-            pool.push(randW);
-        }
-
-        activeWordList = pool;
-    } else if (currentStageIndex === 3) {
-        currentStageNameDisplay.textContent = t.stages[3];
-        let allWords = [];
-        defaultStagesData.forEach(s => allWords = allWords.concat(s.words));
-        activeWordList = allWords;
-    } else {
-        currentStageNameDisplay.textContent = t.stages[currentStageIndex];
-        activeWordList = defaultStagesData[currentStageIndex].words;
-    }
+    currentStageNameDisplay.textContent = getStageTitleText();
+    activeWordList = getActiveWordList();
 
     if (showHint) {
         isWaitingForTutorial = true;
@@ -553,7 +569,6 @@ function setNextQuestion() {
     const correct = activeWordList[correctIndex];
     currentCorrectWord = correct;
 
-    // 音声ファイルの再生（失敗時はspeechSynthesisで読み上げ）
     playWordAudio(correct);
 
     let dummyIndex;
@@ -693,7 +708,7 @@ function endGame() {
 }
 
 function update() {
-    if (!isProcessing && !isGameOver && !isWaitingForTutorial) {
+    if (currentGameMode === 'flick' && !isProcessing && !isGameOver && !isWaitingForTutorial) {
         sushiX -= speed;
         const containerWidth = sushiContainer.offsetWidth || 200;
         if (sushiX < -containerWidth) {
@@ -708,7 +723,200 @@ function update() {
 update(); 
 
 window.addEventListener('keydown', (e) => {
-    if (isGameOver || isWaitingForTutorial) return;
+    if (currentGameMode !== 'flick' || isGameOver || isWaitingForTutorial) return;
     if (e.key === 'ArrowUp') { e.preventDefault(); sortSushi('top'); }
-    if (e.key === 'ArrowDown') { e.preventDefault(); sortSushi('bottom'); }
+    if (e.key === 'ArrowDown') { e.preventDefault(); sortSushi('down'); }
 });
+
+
+// ==========================================
+// B. 音声発話（ボイス）モード ロジック
+// ==========================================
+const voiceGameContainer = document.getElementById('voice-game-screen');
+const voiceScoreDisplay = document.getElementById('voice-score');
+const voiceTimeDisplay = document.getElementById('voice-time');
+const voiceStageNameDisplay = document.getElementById('voice-current-stage-name');
+const voiceHiraganaSpan = document.getElementById('voice-sushi-hiragana');
+const voiceRomajiSpan = document.getElementById('voice-sushi-romaji');
+const voiceStatusHint = document.getElementById('voice-status-hint');
+const voiceResultMessage = document.getElementById('voice-result-message');
+const voiceSushiContainer = document.getElementById('voice-sushi-container');
+
+let voiceTimerId = null;
+let voiceTimeLeft = 30;
+let voiceCurrentScore = 0;
+let voiceActiveWordList = [];
+let currentVoiceWord = null;
+let recognition = null;
+let isVoiceGameActive = false;
+let isVoiceAnimating = false; // アニメーション中フラグ
+
+function startVoiceGame() {
+    showScreen(voiceGameScreen);
+    voiceCurrentScore = 0;
+    voiceTimeLeft = 30;
+    isVoiceGameActive = false;
+    isVoiceAnimating = false;
+    isGameOver = false;
+    lastWordIndex = -1;
+
+    voiceScoreDisplay.textContent = voiceCurrentScore;
+    voiceTimeDisplay.textContent = voiceTimeLeft;
+    voiceStageNameDisplay.textContent = getStageTitleText();
+    voiceActiveWordList = getActiveWordList();
+
+    if (voiceTimerId) clearInterval(voiceTimerId);
+    voiceTimerId = setInterval(() => {
+        if (isGameOver) return;
+        voiceTimeLeft--;
+        voiceTimeDisplay.textContent = voiceTimeLeft;
+        if (voiceTimeLeft <= 0) {
+            stopVoiceRecognition();
+            endGame();
+        }
+    }, 1000);
+
+    initSpeechRecognition();
+    setNextVoiceQuestion();
+}
+
+function setNextVoiceQuestion() {
+    if (isGameOver) return;
+    isVoiceGameActive = false;
+    isVoiceAnimating = false;
+
+    let correctIndex;
+    do {
+        correctIndex = Math.floor(Math.random() * voiceActiveWordList.length);
+    } while (voiceActiveWordList.length > 1 && correctIndex === lastWordIndex);
+
+    lastWordIndex = correctIndex;
+    currentVoiceWord = voiceActiveWordList[correctIndex];
+
+    playWordAudio(currentVoiceWord);
+
+    // 通常表示に戻す（ルビに日本語）
+    voiceRomajiSpan.textContent = currentVoiceWord.romaji || currentVoiceWord.hiragana;
+    voiceHiraganaSpan.textContent = currentVoiceWord.hiragana;
+
+    // 【ご要望対応】「speak into the mic」の次に出る部分を日本語ではなくローマ字に変更
+    const t = i18n[currentLang];
+    const displayRomaji = currentVoiceWord.romaji || currentVoiceWord.hiragana;
+    voiceStatusHint.textContent = `${t.voiceHintPrompt} 「${displayRomaji}」`;
+
+    // 寿司を右側の画面外から真ん中へスライドインさせる準備
+    voiceSushiContainer.style.transition = 'none';
+    voiceSushiContainer.style.left = '150vw';
+    voiceSushiContainer.style.transform = 'translate(-50%, -50%)';
+    voiceSushiContainer.style.opacity = '0';
+
+    // 強制再描画後に中央へアニメーション移動
+    void voiceSushiContainer.offsetWidth;
+    voiceSushiContainer.style.transition = 'left 0.4s ease-out, opacity 0.4s ease-out';
+    voiceSushiContainer.style.left = '50%';
+    voiceSushiContainer.style.opacity = '1';
+
+    setTimeout(() => {
+        if (!isGameOver) {
+            isVoiceGameActive = true;
+        }
+    }, 400);
+}
+
+function initSpeechRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("お使いのブラウザは音声認識に対応していません（Google ChromeやSafariをご利用ください）。");
+        return;
+    }
+
+    if (recognition) {
+        try { recognition.stop(); } catch(e) {}
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = 'ja-JP';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = (event) => {
+        if (!isVoiceGameActive || isVoiceAnimating || isGameOver) return;
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+                const transcript = event.results[i][0].transcript.trim().replace(/[。、！？]/g, "");
+                checkVoiceAnswer(transcript);
+            }
+        }
+    };
+
+    recognition.onerror = (event) => {
+        console.error("音声認識エラー:", event.error);
+    };
+
+    recognition.onend = () => {
+        if (!isGameOver && currentGameMode === 'voice') {
+            try { recognition.start(); } catch(e) {}
+        }
+    };
+
+    try {
+        recognition.start();
+    } catch(e) {}
+}
+
+function stopVoiceRecognition() {
+    if (recognition) {
+        try { recognition.stop(); } catch(e) {}
+    }
+}
+
+function checkVoiceAnswer(spokenText) {
+    if (!currentVoiceWord || !isVoiceGameActive || isVoiceAnimating) return;
+
+    const targetJa = currentVoiceWord.hiragana.replace(/\s+/g, "");
+    const targetSpeak = (currentVoiceWord.speak || "").replace(/\s+/g, "");
+    const targetRomaji = (currentVoiceWord.romaji || "").toLowerCase().replace(/\s+/g, "");
+    const cleanSpoken = spokenText.toLowerCase().replace(/\s+/g, "");
+
+    const isCorrect = cleanSpoken.includes(targetJa) || 
+                      (targetSpeak && cleanSpoken.includes(targetSpeak)) || 
+                      (targetRomaji && cleanSpoken.includes(targetRomaji));
+
+    if (isCorrect) {
+        isVoiceGameActive = false;
+        isVoiceAnimating = true;
+        voiceCurrentScore += 20;
+        voiceScoreDisplay.textContent = voiceCurrentScore;
+
+        // ローマ字の下にある日本語（ルビ部分）を英語に変わるようにする
+        voiceRomajiSpan.textContent = currentVoiceWord.romaji || currentVoiceWord.hiragana;
+        voiceHiraganaSpan.textContent = `✨ ${currentVoiceWord.english} ✨`;
+
+        voiceStatusHint.textContent = `正解！🎉`;
+        
+        // 【ご要望対応】SUCCESS! の下に出る英語を SUCCESS! と同じくらいの大きさ（72px）に変更
+        showVoiceSuccessMessage(currentVoiceWord.english);
+
+        // 成功したら寿司が左側に流れて画面外へ行く
+        voiceSushiContainer.style.transition = 'left 0.4s ease-in, opacity 0.4s ease-in';
+        voiceSushiContainer.style.left = '-50vw';
+        voiceSushiContainer.style.opacity = '0';
+
+        setTimeout(() => {
+            if (!isGameOver) {
+                setNextVoiceQuestion();
+            }
+        }, 1000);
+    }
+}
+
+// 音声認識専用のSUCCESSメッセージ表示関数（英語のサイズを大サイズに）
+function showVoiceSuccessMessage(englishWord) {
+    voiceResultMessage.innerHTML = `SUCCESS!<br><span style="font-size: 72px; color: #ffccbc;">${englishWord}</span>`;
+    voiceResultMessage.className = `success show`;
+    setTimeout(() => {
+        voiceResultMessage.className = "";
+        voiceResultMessage.innerHTML = "";
+    }, 900);
+}

@@ -130,6 +130,19 @@ body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg {
 }
 #goto-setting-btn:hover { background-color: #3e2723; }
 
+/* タイトル画面のクレジット表示 */
+#voicevox-credit {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-color);
+    opacity: 0.7;
+    z-index: 150;
+    pointer-events: none;
+}
+
 .btn-back { background-color: #757575; } 
 .btn-back:hover { background-color: #616161; }
 
@@ -308,14 +321,14 @@ body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg {
     filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
 }
 
-#result-message {
+#result-message, #voice-result-message {
     position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
     font-size: 72px; font-weight: 900; opacity: 0; transition: all 0.2s ease-out; z-index: 100;
     white-space: nowrap;
 }
-#result-message.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-#result-message.success { color: #2e7d32; text-shadow: 0 0 10px white; }
-#result-message.miss { color: #d32f2f; text-shadow: 0 0 10px white; }
+#result-message.show, #voice-result-message.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+#result-message.success, #voice-result-message.success { color: #2e7d32; text-shadow: 0 0 10px white; }
+#result-message.miss, #voice-result-message.miss { color: #d32f2f; text-shadow: 0 0 10px white; }
 
 @keyframes rainbowText {
     0% { color: #ff0000; text-shadow: 0 0 15px #ff0000, 0 0 25px #ffffff; }
@@ -326,7 +339,7 @@ body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg {
     83% { color: #4b0082; text-shadow: 0 0 15px #4b0082, 0 0 25px #ffffff; }
     100% { color: #ee82ee; text-shadow: 0 0 15px #ee82ee, 0 0 25px #ffffff; }
 }
-#result-message.fever-rainbow {
+#result-message.fever-rainbow, #voice-result-message.fever-rainbow {
     animation: rainbowText 0.8s linear infinite;
 }
 
@@ -378,16 +391,3 @@ body.theme-neon #home-kanji-bg, body.theme-gold #home-kanji-bg {
 .modal-title { font-size: 48px; font-weight: bold; margin-bottom: 10px; }
 .final-score-value { font-size: 72px; font-weight: bold; color: #ffccbc; margin-bottom: 10px; }
 .new-record { color: #ff5252; font-size: 24px; font-weight: bold; margin-bottom: 20px; height: 30px; }
-
-/* タイトル画面のクレジット表示 */
-#voicevox-credit {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    font-size: 14px;
-    font-weight: bold;
-    color: var(--text-color);
-    opacity: 0.7;
-    z-index: 150;
-    pointer-events: none;
-}

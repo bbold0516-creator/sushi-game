@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sushi Game - カスタムステージ機能対応版</title>
+    <title>Sushi Game - 発音モード修正版</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="theme-default">
@@ -46,13 +46,24 @@
             <div class="subtitle"><span data-i18n="totalBestScore">合計ベストスコア</span>: <span id="home-total-score">0</span></div>
         </div>
         <div style="position: relative; z-index: 20;">
-            <button id="goto-stage-btn" class="btn btn-stage" data-i18n="stageBtn">スタート 🎮</button>
+            <button id="goto-mode-select-btn" class="btn btn-stage" data-i18n="stageBtn">スタート 🎮</button>
             <button id="go-store-btn" class="btn btn-store" data-i18n="storeBtn">マイストア 🛒</button>
             <button id="goto-zukan-btn" class="btn btn-zukan" data-i18n="zukanBtn">図鑑 📖</button>
         </div>
         <button id="goto-setting-btn" class="btn" data-i18n="settingBtn">設定 ⚙️</button>
-        
         <div id="voicevox-credit">VOICEVOX:あんこもん</div>
+    </div>
+
+    <!-- 1-B. モード選択画面 -->
+    <div id="mode-select-screen" class="screen hidden">
+        <div class="panel">
+            <h2 style="margin: 0 0 20px 0; font-size: 28px;" data-i18n="modeSelectTitle">モード選択</h2>
+            <div class="selection-list">
+                <button id="mode-flick-btn" class="selection-btn" style="background-color: #d32f2f;" data-i18n="modeFlick">フリック（通常）モード 👆</button>
+                <button id="mode-voice-speech-btn" class="selection-btn" style="background-color: #00796b;" data-i18n="modeVoice">音声発話モード 🗣️</button>
+            </div>
+            <button id="mode-back-btn" class="btn btn-back" style="padding: 12px 30px; font-size: 20px; margin-top: 10px;" data-i18n="backHome">ホームに戻る</button>
+        </div>
     </div>
 
     <!-- 2. ステージ選択画面 -->
@@ -61,7 +72,7 @@
             <h2 style="margin: 0 0 15px 0; font-size: 28px;" data-i18n="stageSelect">ステージ選択</h2>
             <div id="stage-list-container" class="selection-list"></div>
             <button id="goto-create-stage-btn" class="btn" style="background-color: #2e7d32; font-size: 18px; padding: 12px 30px;" data-i18n="createStageBtn">新規作成 ➕</button>
-            <button id="stage-back-btn" class="btn btn-back" style="padding: 12px 30px; font-size: 18px; margin-top: 5px;" data-i18n="backHome">ホームに戻る</button>
+            <button id="stage-back-btn" class="btn btn-back" style="padding: 12px 30px; font-size: 18px; margin-top: 5px;" data-i18n="backModeSelect">モード選択に戻る</button>
         </div>
     </div>
 
@@ -72,12 +83,12 @@
             
             <div class="form-group">
                 <label data-i18n="stageNameLabel">ステージの名前</label>
-                <input type="text" id="custom-stage-name" class="form-input" placeholder="例: 果物ステージ">
+                <input type="text" id="custom-stage-name" class="form-input" data-i18n-placeholder="stageNamePlaceholder" placeholder="例: 果物ステージ">
             </div>
 
             <div class="form-group">
                 <label data-i18n="wordListLabel">単語リスト (1行に1つの単語ペア)</label>
-                <textarea id="custom-stage-words" class="form-textarea" placeholder="日本語, English&#10;例:&#10;もも, Peach&#10;ぶどう, Grape"></textarea>
+                <textarea id="custom-stage-words" class="form-textarea" data-i18n-placeholder="wordListPlaceholder" placeholder="日本語, English&#10;例:&#10;もも, Peach&#10;ぶどう, Grape"></textarea>
                 <div style="font-size: 12px; opacity: 0.7; margin-top: 4px;" data-i18n="wordListHint">※カンマ(,)で区切って「日本語, 英語」の形式で入力してください。</div>
             </div>
 
@@ -150,7 +161,7 @@
         </div>
     </div>
 
-    <!-- 7. ゲーム画面 -->
+    <!-- 7. ゲーム画面（フリック用） -->
     <div id="game-screen" class="screen hidden">
         <div id="top-lane" class="target-lane">
             <span class="key-badge" data-i18n="upKey">↑ キー</span><span id="top-word"></span>
@@ -186,6 +197,30 @@
                 <button id="tutorial-ok-btn" class="btn" style="padding: 10px 40px; font-size: 20px; margin: 0;" data-i18n="okBtn">OK</button>
             </div>
         </div>
+    </div>
+
+    <!-- 7-B. 音声発話ゲーム画面 -->
+    <div id="voice-game-screen" class="screen hidden">
+        <div id="voice-header-info" style="position: absolute; top: 30px; left: 30px; right: 30px; display: flex; justify-content: space-between; z-index: 20;">
+            <div class="info-card"><span data-i18n="stageLabel">ステージ</span>: <span id="voice-current-stage-name"></span></div>
+            <div class="info-card"><span data-i18n="scoreLabel">スコア</span>: <span id="voice-score">0</span></div>
+            <div class="info-card"><span data-i18n="timeLabel">残り時間</span>: <span id="voice-time">30</span><span data-i18n="secUnit">秒</span></div>
+        </div>
+
+        <div id="voice-sushi-container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 15;">
+            <!-- 中央の寿司＆言葉カード：ルビ（日本語）が英語に変わる構造 -->
+            <div id="voice-sushi-word" style="font-size: 48px; font-weight: bold; color: #222; background-color: #ffffff; padding: 16px 40px; border-radius: 30px; border: 4px solid #00796b; margin-bottom: 15px; display: inline-block; box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
+                <ruby><span id="voice-sushi-romaji" style="font-size: 32px; color: #00796b;"></span><rt id="voice-sushi-hiragana" style="font-size: 24px; color: #222; font-weight: bold;"></rt></ruby>
+            </div>
+            <div>
+                <svg class="sushi-character-img" style="width: 160px; height: 100px;"><use href="#sushi-character"/></svg>
+            </div>
+            <div id="voice-status-hint" style="margin-top: 20px; font-size: 20px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.5); padding: 8px 20px; border-radius: 20px; display: inline-block;" data-i18n="voiceHintPrompt">
+                🎤 マイクで発音してね...
+            </div>
+        </div>
+
+        <div id="voice-result-message"></div>
     </div>
 
     <!-- 8. ゲーム終了画面 -->
