@@ -2,8 +2,8 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sushi Game - 発音モード修正版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sushi Game - スマホ対応版</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="theme-default">
@@ -42,22 +42,21 @@
     <div id="home-screen" class="screen">
         <div class="home-title-card" style="max-width: 580px; width: 90%;">
             <svg class="home-mascot"><use href="#sushi-character"/></svg>
-            <div class="title" style="font-size: 52px;">sushi go round</div>
+            <div class="title" style="font-size: min(10vw, 52px);">sushi go round</div>
             
-            <!-- 左右分割＆大きめ文字のスコア表示エリア -->
             <div style="display: flex; justify-content: center; gap: 15px; margin-top: 15px; width: 100%;">
-                <div style="background: rgba(0, 0, 0, 0.15); padding: 12px 15px; border-radius: 15px; flex: 1; text-align: center; border: 1px solid rgba(255,255,255,0.25);">
-                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 4px; font-weight: bold;">👆 フリック合計</div>
-                    <div style="font-size: 28px; font-weight: bold; color: #ffccbc;"><span id="home-flick-total-score">0</span></div>
+                <div style="background: rgba(0, 0, 0, 0.15); padding: 10px; border-radius: 15px; flex: 1; text-align: center; border: 1px solid rgba(255,255,255,0.25);">
+                    <div style="font-size: 13px; opacity: 0.9; margin-bottom: 4px; font-weight: bold;">👆 フリック合計</div>
+                    <div style="font-size: min(6vw, 24px); font-weight: bold; color: #ffccbc;"><span id="home-flick-total-score">0</span></div>
                 </div>
-                <div style="background: rgba(0, 0, 0, 0.15); padding: 12px 15px; border-radius: 15px; flex: 1; text-align: center; border: 1px solid rgba(255,255,255,0.25);">
-                    <div style="font-size: 14px; opacity: 0.9; margin-bottom: 4px; font-weight: bold;">🗣️ 音声発話合計</div>
-                    <div style="font-size: 28px; font-weight: bold; color: #ffccbc;"><span id="home-voice-total-score">0</span></div>
+                <div style="background: rgba(0, 0, 0, 0.15); padding: 10px; border-radius: 15px; flex: 1; text-align: center; border: 1px solid rgba(255,255,255,0.25);">
+                    <div style="font-size: 13px; opacity: 0.9; margin-bottom: 4px; font-weight: bold;">🗣️ 音声発話合計</div>
+                    <div style="font-size: min(6vw, 24px); font-weight: bold; color: #ffccbc;"><span id="home-voice-total-score">0</span></div>
                 </div>
             </div>
         </div>
 
-        <div style="position: relative; z-index: 20;">
+        <div style="position: relative; z-index: 20; display: flex; flex-direction: column; align-items: center; width: 100%;">
             <button id="goto-mode-select-btn" class="btn btn-stage" data-i18n="stageBtn">スタート 🎮</button>
             <button id="go-store-btn" class="btn btn-store" data-i18n="storeBtn">マイストア 🛒</button>
             <button id="goto-zukan-btn" class="btn btn-zukan" data-i18n="zukanBtn">図鑑 📖</button>
@@ -69,29 +68,29 @@
     <!-- 1-B. モード選択画面 -->
     <div id="mode-select-screen" class="screen hidden">
         <div class="panel">
-            <h2 style="margin: 0 0 20px 0; font-size: 28px;" data-i18n="modeSelectTitle">モード選択</h2>
+            <h2 style="margin: 0 0 20px 0; font-size: 26px;" data-i18n="modeSelectTitle">モード選択</h2>
             <div class="selection-list">
                 <button id="mode-flick-btn" class="selection-btn" style="background-color: #d32f2f;" data-i18n="modeFlick">フリックモード 👆</button>
                 <button id="mode-voice-speech-btn" class="selection-btn" style="background-color: #00796b;" data-i18n="modeVoice">音声発話モード 🗣️</button>
             </div>
-            <button id="mode-back-btn" class="btn btn-back" style="padding: 12px 30px; font-size: 20px; margin-top: 10px;" data-i18n="backHome">ホームに戻る</button>
+            <button id="mode-back-btn" class="btn btn-back" data-i18n="backHome">ホームに戻る</button>
         </div>
     </div>
 
     <!-- 2. ステージ選択画面 -->
     <div id="stage-screen" class="screen hidden">
         <div class="panel">
-            <h2 style="margin: 0 0 15px 0; font-size: 28px;" data-i18n="stageSelect">ステージ選択</h2>
+            <h2 style="margin: 0 0 15px 0; font-size: 26px;" data-i18n="stageSelect">ステージ選択</h2>
             <div id="stage-list-container" class="selection-list"></div>
-            <button id="goto-create-stage-btn" class="btn" style="background-color: #2e7d32; font-size: 18px; padding: 12px 30px;" data-i18n="createStageBtn">新規作成 ➕</button>
-            <button id="stage-back-btn" class="btn btn-back" style="padding: 12px 30px; font-size: 18px; margin-top: 5px;" data-i18n="backModeSelect">モード選択に戻る</button>
+            <button id="goto-create-stage-btn" class="btn" style="background-color: #2e7d32;" data-i18n="createStageBtn">新規作成 ➕</button>
+            <button id="stage-back-btn" class="btn btn-back" data-i18n="backModeSelect">モード選択に戻る</button>
         </div>
     </div>
 
     <!-- 2-B. ステージ新規作成画面 -->
     <div id="create-stage-screen" class="screen hidden">
-        <div class="panel" style="width: 500px;">
-            <h2 style="margin: 0 0 15px 0; font-size: 26px;" data-i18n="createStageTitle">ステージ新規作成</h2>
+        <div class="panel">
+            <h2 style="margin: 0 0 15px 0; font-size: 24px;" data-i18n="createStageTitle">ステージ新規作成</h2>
             
             <div class="form-group">
                 <label for="custom-stage-name" data-i18n="stageNameLabel">ステージの名前</label>
@@ -101,47 +100,47 @@
             <div class="form-group">
                 <label for="custom-stage-words" data-i18n="wordListLabel">単語リスト (1行に1つの単語ペア)</label>
                 <textarea id="custom-stage-words" class="form-textarea" data-i18n-placeholder="wordListPlaceholder" placeholder="日本語, English&#10;例:&#10;もも, Peach&#10;ぶどう, Grape"></textarea>
-                <div style="font-size: 12px; opacity: 0.7; margin-top: 4px;" data-i18n="wordListHint">※カンマ(,)で区切って「日本語, 英語」の形式で入力してください。</div>
+                <div style="font-size: 11px; opacity: 0.7; margin-top: 4px;" data-i18n="wordListHint">※カンマ(,)で区切って「日本語, 英語」の形式で入力してください。</div>
             </div>
 
-            <button id="save-stage-btn" class="btn" style="background-color: #2e7d32; font-size: 18px; padding: 12px 30px; width: 100%; margin: 10px 0 5px 0;" data-i18n="submitCreateBtn">ステージを作成 🚀</button>
-            <button id="create-back-btn" class="btn btn-back" style="padding: 10px 30px; font-size: 16px; width: 100%; margin: 0;" data-i18n="backStageSelect">ステージ選択に戻る</button>
+            <button id="save-stage-btn" class="btn" style="background-color: #2e7d32; width: 100%; margin: 10px 0 5px 0;" data-i18n="submitCreateBtn">ステージを作成 🚀</button>
+            <button id="create-back-btn" class="btn btn-back" style="width: 100%; margin: 0;" data-i18n="backStageSelect">ステージ選択に戻る</button>
         </div>
     </div>
 
     <!-- 3. マイストア画面 -->
     <div id="store-screen" class="screen hidden">
         <div class="panel">
-            <h2 style="margin: 0 0 10px 0; font-size: 28px;" data-i18n="storeTitle">マイストア</h2>
+            <h2 style="margin: 0 0 10px 0; font-size: 26px;" data-i18n="storeTitle">マイストア</h2>
             <div class="high-score-display"><span data-i18n="totalBestScore">合計ベストスコア</span>: <span id="store-total-score">0</span></div>
             <div id="theme-list-container" class="selection-list"></div>
-            <button id="back-home-btn" class="btn btn-back" style="padding: 12px 30px; font-size: 20px; margin-top: 5px;" data-i18n="backHome">ホームに戻る</button>
+            <button id="back-home-btn" class="btn btn-back" data-i18n="backHome">ホームに戻る</button>
         </div>
     </div>
 
     <!-- 4. 図鑑画面 -->
     <div id="zukan-screen" class="screen hidden">
         <div class="panel panel-zukan">
-            <h2 style="margin: 0 0 10px 0; font-size: 28px;" data-i18n="zukanTitle">単語図鑑</h2>
+            <h2 style="margin: 0 0 10px 0; font-size: 26px;" data-i18n="zukanTitle">単語図鑑</h2>
             <div class="zukan-header">
                 <span class="zukan-emoji" data-i18n="emojiCol">絵文字</span>
-                <span class="zukan-en" data-i18n="englishCol">英語 (English)</span>
+                <span class="zukan-en" data-i18n="englishCol">英語</span>
                 <span class="zukan-ja" data-i18n="japaneseCol">日本語</span>
                 <span class="zukan-ro" data-i18n="romajiCol">ローマ字</span>
             </div>
             <div id="zukan-list-container" class="zukan-list"></div>
-            <button id="zukan-back-btn" class="btn btn-back" style="padding: 12px 30px; font-size: 20px; margin-top: 5px;" data-i18n="backHome">ホームに戻る</button>
+            <button id="zukan-back-btn" class="btn btn-back" data-i18n="backHome">ホームに戻る</button>
         </div>
     </div>
 
     <!-- 図鑑詳細モーダル -->
     <div id="zukan-modal" class="screen hidden" style="background: rgba(0,0,0,0.7); z-index: 300;">
-        <div class="panel" style="width: 450px;">
-            <div id="modal-emoji" style="font-size: 60px; margin-bottom: 5px;">🍎</div>
-            <h3 id="modal-ja" style="font-size: 32px; margin: 0 0 5px 0;">りんご</h3>
-            <div id="modal-en-ro" style="font-size: 18px; opacity: 0.9; margin-bottom: 15px;">Apple (ringo)</div>
-            <p id="modal-trivia" style="font-size: 16px; line-height: 1.5; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: left;"></p>
-            <button id="modal-speak-btn" class="btn" style="background-color: #00796b; width: 100%; margin-bottom: 10px;">🔊 発音を聞く</button>
+        <div class="panel" style="width: 90%; max-width: 420px;">
+            <div id="modal-emoji" style="font-size: 50px; margin-bottom: 5px;">🍎</div>
+            <h3 id="modal-ja" style="font-size: 28px; margin: 0 0 5px 0;">りんご</h3>
+            <div id="modal-en-ro" style="font-size: 16px; opacity: 0.9; margin-bottom: 12px;">Apple (ringo)</div>
+            <p id="modal-trivia" style="font-size: 14px; line-height: 1.4; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; margin-bottom: 15px; text-align: left;"></p>
+            <button id="modal-speak-btn" class="btn" style="background-color: #00796b; width: 100%; margin-bottom: 8px;">🔊 発音を聞く</button>
             <button id="modal-close-btn" class="btn btn-back" style="width: 100%; margin: 0;" data-i18n="closeBtn">とじる</button>
         </div>
     </div>
@@ -149,34 +148,34 @@
     <!-- 5. 設定メイン画面 -->
     <div id="setting-screen" class="screen hidden">
         <div class="panel">
-            <h2 style="margin: 0 0 20px 0; font-size: 28px;" data-i18n="settingTitle">設定</h2>
+            <h2 style="margin: 0 0 20px 0; font-size: 26px;" data-i18n="settingTitle">設定</h2>
             <div class="selection-list">
                 <button id="toggle-hint-btn" class="selection-btn" style="background-color: #00796b;"></button>
                 <button id="toggle-voice-btn" class="selection-btn" style="background-color: #00796b;"></button>
                 <button id="goto-lang-screen-btn" class="selection-btn" style="background-color: #d32f2f;" data-i18n="langSettingBtn">言語設定 🌐</button>
                 <button id="reset-record-btn" class="selection-btn" style="background-color: #c62828;" data-i18n="resetRecordBtn">最高記録リセット 🗑️</button>
             </div>
-            <button id="setting-back-btn" class="btn btn-back" style="padding: 12px 30px; font-size: 20px; margin-top: 10px;" data-i18n="backHome">ホームに戻る</button>
+            <button id="setting-back-btn" class="btn btn-back" data-i18n="backHome">ホームに戻る</button>
         </div>
     </div>
 
     <!-- 6. 言語設定画面 -->
     <div id="lang-screen" class="screen hidden">
         <div class="panel">
-            <h2 style="margin: 0 0 15px 0; font-size: 28px;" data-i18n="langSettingTitle">言語設定</h2>
-            <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;" data-i18n="langLabel">言語 / Language</div>
+            <h2 style="margin: 0 0 15px 0; font-size: 26px;" data-i18n="langSettingTitle">言語設定</h2>
+            <div style="font-size: 16px; font-weight: bold; margin-bottom: 10px;" data-i18n="langLabel">言語 / Language</div>
             <div class="selection-list">
                 <button id="lang-ja-btn" class="selection-btn" style="background-color: #00796b;">日本語 (Japanese)</button>
                 <button id="lang-en-btn" class="selection-btn" style="background-color: #00796b;">English (英語)</button>
             </div>
-            <button id="lang-back-btn" class="btn btn-back" style="padding: 12px 30px; font-size: 20px; margin-top: 5px;" data-i18n="backSetting">設定に戻る</button>
+            <button id="lang-back-btn" class="btn btn-back" data-i18n="backSetting">設定に戻る</button>
         </div>
     </div>
 
     <!-- 7. ゲーム画面（フリック用） -->
     <div id="game-screen" class="screen hidden">
         <div id="top-lane" class="target-lane">
-            <span class="key-badge" data-i18n="upKey">↑ キー</span><span id="top-word"></span>
+            <span class="key-badge" data-i18n="upKey">👆 上スワイプ / ↑</span><span id="top-word"></span>
         </div>
 
         <div id="header-info">
@@ -195,7 +194,7 @@
         </div>
 
         <div id="bottom-lane" class="target-lane">
-            <span class="key-badge" data-i18n="downKey">↓ キー</span><span id="bottom-word"></span>
+            <span class="key-badge" data-i18n="downKey">👇 下スワイプ / ↓</span><span id="bottom-word"></span>
         </div>
         
         <div id="result-message"></div>
@@ -204,31 +203,30 @@
             <div id="tutorial-hand">👆</div>
             <div id="tutorial-box">
                 <svg class="tutorial-mascot"><use href="#sushi-character"/></svg>
-                <div id="tutorial-text" data-i18n="tutorialText">スワイプまたは↑キー、↓キーを押してプレイ</div>
+                <div id="tutorial-text" data-i18n="tutorialText">上下にスワイプするか、レーンをタップしてプレイ！</div>
                 <div id="tutorial-sub-text" data-i18n="hintAutoOffMsg">設定画面からいつでもオンにできます</div>
-                <button id="tutorial-ok-btn" class="btn" style="padding: 10px 40px; font-size: 20px; margin: 0;" data-i18n="okBtn">OK</button>
+                <button id="tutorial-ok-btn" class="btn" style="padding: 10px 30px; font-size: 18px; margin: 0;" data-i18n="okBtn">OK</button>
             </div>
         </div>
     </div>
 
     <!-- 7-B. 音声発話ゲーム画面 -->
     <div id="voice-game-screen" class="screen hidden">
-        <div id="voice-header-info" style="position: absolute; top: 30px; left: 30px; right: 30px; display: flex; justify-content: space-between; z-index: 20;">
+        <div id="voice-header-info">
             <div class="info-card"><span data-i18n="stageLabel">ステージ</span>: <span id="voice-current-stage-name"></span></div>
             <div class="info-card"><span data-i18n="scoreLabel">スコア</span>: <span id="voice-score">0</span></div>
             <div class="info-card"><span data-i18n="timeLabel">残り時間</span>: <span id="voice-time">30</span><span data-i18n="secUnit">秒</span></div>
         </div>
 
-        <div id="voice-sushi-container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 15;">
-            <!-- 中央の寿司＆言葉カード：ルビ（日本語）が英語に変わる構造 -->
-            <div id="voice-sushi-word" style="font-size: 48px; font-weight: bold; color: #222; background-color: #ffffff; padding: 16px 40px; border-radius: 30px; border: 4px solid #00796b; margin-bottom: 15px; display: inline-block; box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
-                <ruby><span id="voice-sushi-romaji" style="font-size: 32px; color: #00796b;"></span><rt id="voice-sushi-hiragana" style="font-size: 24px; color: #222; font-weight: bold;"></rt></ruby>
+        <div id="voice-sushi-container">
+            <div id="voice-sushi-word">
+                <ruby><span id="voice-sushi-romaji" style="font-size: 28px; color: #00796b;"></span><rt id="voice-sushi-hiragana" style="font-size: 20px; color: #222; font-weight: bold;"></rt></ruby>
             </div>
             <div>
-                <svg class="sushi-character-img" style="width: 160px; height: 100px;"><use href="#sushi-character"/></svg>
+                <svg class="sushi-character-img" style="width: 140px; height: 90px;"><use href="#sushi-character"/></svg>
             </div>
-            <div id="voice-status-hint" style="margin-top: 20px; font-size: 20px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.5); padding: 8px 20px; border-radius: 20px; display: inline-block;" data-i18n="voiceHintPrompt">
-                🎤 マイクで発音してね...
+            <div id="voice-status-hint" data-i18n="voiceHintPrompt">
+                🎤 マイクに向かって発音してね...
             </div>
         </div>
 
@@ -239,7 +237,7 @@
     <div id="game-over-modal">
         <div class="modal-content">
             <div class="modal-title" data-i18n="timeUp">TIME UP!</div>
-            <div style="font-size: 24px; opacity: 0.8;" data-i18n="finalScoreLabel">獲得スコア</div>
+            <div style="font-size: 20px; opacity: 0.8;" data-i18n="finalScoreLabel">獲得スコア</div>
             <div class="final-score-value" id="final-score">0</div>
             <div class="new-record" id="new-record-msg"></div>
             <button id="modal-home-btn" class="btn" style="background-color: #d32f2f;" data-i18n="backHome">ホームに戻る</button>

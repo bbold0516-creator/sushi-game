@@ -33,7 +33,7 @@ if (typeof themes !== 'undefined') {
             theme.unlockScore = 500;
             theme.mode = 'flick'; 
         } else if (theme.id === 'theme-pixel') {
-            theme.unlockScore = 2500; // フリックモードの合計スコアで2500点
+            theme.unlockScore = 2500; 
             theme.mode = 'flick'; 
         } else if (theme.id === 'theme-neon') {
             theme.unlockScore = 1000;
@@ -835,10 +835,45 @@ function update() {
 }
 update(); 
 
+// キーボード操作（PC用）
 window.addEventListener('keydown', (e) => {
     if (currentGameMode !== 'flick' || isGameOver || isWaitingForTutorial) return;
     if (e.key === 'ArrowUp') { e.preventDefault(); sortSushi('top'); }
     if (e.key === 'ArrowDown') { e.preventDefault(); sortSushi('bottom'); }
+});
+
+// スマホ向けタッチ・スワイプ操作
+let touchStartY = 0;
+gameScreen.addEventListener('touchstart', (e) => {
+    if (currentGameMode !== 'flick' || isGameOver || isWaitingForTutorial) return;
+    touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+gameScreen.addEventListener('touchend', (e) => {
+    if (currentGameMode !== 'flick' || isGameOver || isWaitingForTutorial) return;
+    let touchEndY = e.changedTouches[0].clientY;
+    let diffY = touchEndY - touchStartY;
+
+    // 30px以上上下にスワイプされた場合
+    if (Math.abs(diffY) > 30) {
+        if (diffY < 0) {
+            sortSushi('top');    // 上スワイプ
+        } else {
+            sortSushi('bottom'); // 下スワイプ
+        }
+    }
+}, { passive: true });
+
+// 上下レーンの直接タップ操作
+document.getElementById('top-lane').addEventListener('click', () => {
+    if (currentGameMode === 'flick' && !isGameOver && !isWaitingForTutorial) {
+        sortSushi('top');
+    }
+});
+document.getElementById('bottom-lane').addEventListener('click', () => {
+    if (currentGameMode === 'flick' && !isGameOver && !isWaitingForTutorial) {
+        sortSushi('bottom');
+    }
 });
 
 
@@ -993,7 +1028,7 @@ function checkVoiceAnswer(spokenText) {
 
     const isCorrect = cleanSpoken.includes(targetJa) || 
                       (targetSpeak && cleanSpoken.includes(targetSpeak)) || 
-                      (targetRomaji && cleanSpogen.includes(targetRomaji)); // (修正部分含む)
+                      (targetRomaji && cleanSpoken.includes(targetRomaji));
 
     if (isCorrect) {
         isVoiceGameActive = false;
@@ -1021,7 +1056,7 @@ function checkVoiceAnswer(spokenText) {
 }
 
 function showVoiceSuccessMessage(englishWord) {
-    voiceResultMessage.innerHTML = `SUCCESS!<br><span style="font-size: 72px; color: #ffccbc;">${englishWord}</span>`;
+    voiceResultMessage.innerHTML = `SUCCESS!<br><span style="font-size: 60px; color: #ffccbc;">${englishWord}</span>`;
     voiceResultMessage.className = `success show`;
     setTimeout(() => {
         voiceResultMessage.className = "";
