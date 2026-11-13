@@ -186,7 +186,7 @@ const defaultStagesData = [
     {
         words: [
             { hiragana: "りんご", speak: "リンゴ", romaji: "ringo", english: "Apple", emoji: "🍎", trivia: "「1日1個のりんごは医者を遠ざける」という英語のことわざがあるよ。", triviaEn: "There is an English proverb: 'An apple a day keeps the doctor away'." },
-            { hiragana: "ばなな", speak: "バナナ", romaji: "banana", english: "Banana", emoji: "🍌", trivia: "バナナは木ではなく、大きな「草」の仲間で、黄色い実がなるよ。", triviaEn: "Bananas are not trees, but rather members of a large herbaceous plant family." },
+            { hiragana: "ばなな", speak: "バナナ", romaji: "banana", english: "Banana", emoji: "🍌", trivia: "バナナは木ではなく、大きな「草`の仲間で、黄色い実がなるよ。", triviaEn: "Bananas are not trees, but rather members of a large herbaceous plant family." },
             { hiragana: "すいか", speak: "スイカ", romaji: "suika", english: "Watermelon", emoji: "🍉", trivia: "スイカの大部分（約90％）は水分で、夏のおやつの水分補給にぴったりだよ。", triviaEn: "Watermelons are mostly water (about 90%), making them great for summer hydration." },
             { hiragana: "ごはん", speak: "ごはん", romaji: "gohan", english: "Rice", emoji: "🍚", trivia: "お米（ごはん）は日本の主食で、元気なエネルギーの源になるよ。", triviaEn: "Rice is a staple food in Japan and serves as a great source of energetic fuel." },
             { hiragana: "ぱん", speak: "パン", romaji: "pan", english: "Bread", emoji: "🍞", trivia: "パンは世界中で食べられていて、小麦粉を発酵させて焼くんだよ。", triviaEn: "Bread is eaten all around the world and is made by fermenting and baking wheat flour." },
@@ -200,7 +200,7 @@ const defaultStagesData = [
             { hiragana: "おにぎり", speak: "おにぎり", romaji: "onigiri", english: "Rice ball", emoji: "🍙", trivia: "おにぎりはご飯をギュッと握った日本伝統のファストフードだよ。", triviaEn: "Onigiri are tightly shaped rice balls, a traditional Japanese fast food." },
             { hiragana: "みかん", speak: "ミカン", romaji: "mikan", english: "Mandarin orange", emoji: "🍊", trivia: "ミカンにはビタミンCがたっぷり入っていて、風邪予防にぴったりの果物だよ。", triviaEn: "Mandarin oranges are packed with vitamin C, making them perfect for preventing colds." },
             { hiragana: "いちご", speak: "イチゴ", romaji: "ichigo", english: "Strawberry", emoji: "🍓", trivia: "イチゴの表面にあるツブツブの実は、実は一つひとつが別の果実なんだよ。", triviaEn: "The tiny bumps on the surface of a strawberry are actually individual fruits." },
-            { hiragana: "ぷりん", speak: "プリン", romaji: "purin", english: "Pudding", emoji: "🍮", trivia: "プリンは卵と牛乳、砂糖を混ぜて蒸し固めた、なめらかな口当たりが人気のデザートだよ。", triviaEn: "Pudding is a popular smooth dessert made by steaming a mix of eggs, milk, and sugar." },
+            { hiragana: "ぷりん", stem: "プリン", romaji: "purin", english: "Pudding", emoji: "🍮", trivia: "プリンは卵と牛乳、砂糖を混ぜて蒸し固めた、なめらかな口当たりが人気のデザートだよ。", triviaEn: "Pudding is a popular smooth dessert made by steaming a mix of eggs, milk, and sugar." },
             { hiragana: "ちょこ", speak: "チョコ", romaji: "choko", english: "Chocolate", emoji: "🍫", trivia: "チョコレートはカカオから作られていて、食べると心がホッと癒されるよ。", triviaEn: "Chocolate is made from cacao, and eating it helps soothe and heal the heart." },
             { hiragana: "ぴざ", speak: "ピザ", romaji: "piza", english: "Pizza", emoji: "🍕", trivia: "ピザはイタリア発祥の料理で、丸い生地にチーズや具材を乗せてオーブンで焼き上げるよ。", triviaEn: "Pizza originated in Italy, made with round dough topped with cheese and baked in an oven." }
         ]
