@@ -3,39 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sushi Game - 完全対応版</title>
+    <title>Sushi Go Round</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="theme-default">
 
-    <!-- キャラクターテンプレート定義 -->
+    <!-- キャラクターテンプレート定義（お皿付きバージョン対応） -->
     <svg style="display: none;">
-        <symbol id="sushi-character" viewBox="0 0 200 130">
-            <path d="M 25 60 C 20 85, 30 110, 80 115 C 130 120, 175 105, 180 80 C 185 65, 160 55, 130 55 C 80 55, 30 50, 25 60 Z" fill="#FFFBF0" stroke="#5A3214" stroke-width="6" stroke-linejoin="round"/>
-            <circle cx="45" cy="85" r="4" fill="#E8DFD0"/>
-            <circle cx="65" cy="95" r="5" fill="#E8DFD0"/>
-            <circle cx="95" cy="100" r="4" fill="#E8DFD0"/>
-            <circle cx="125" cy="95" r="5" fill="#E8DFD0"/>
-            <circle cx="155" cy="85" r="4" fill="#E8DFD0"/>
-            <circle cx="80" cy="80" r="4" fill="#E8DFD0"/>
-            <circle cx="110" cy="82" r="5" fill="#E8DFD0"/>
-            <circle cx="140" cy="75" r="4" fill="#E8DFD0"/>
-            
-            <circle cx="48" cy="82" r="4" fill="#1A1A1A"/>
-            <circle cx="68" cy="84" r="4" fill="#1A1A1A"/>
-            <path d="M 52 90 Q 58 97 64 90" fill="none" stroke="#1A1A1A" stroke-width="3" stroke-linecap="round"/>
-
-            <path d="M 15 50 C 10 25, 60 10, 120 15 C 165 20, 190 35, 185 55 C 180 72, 130 75, 70 70 C 25 65, 18 60, 15 50 Z" fill="#FF6B4A" stroke="#5A3214" stroke-width="6" stroke-linejoin="round"/>
-            <path d="M 35 45 Q 65 25 115 28 Q 155 30 175 42" fill="none" stroke="#FFA38F" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
-            <path d="M 30 55 Q 70 38 125 40 Q 155 42 170 54" fill="none" stroke="#FFA38F" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
-            <ellipse cx="80" cy="25" rx="25" ry="6" fill="#FFFFFF" opacity="0.4" transform="rotate(-5 80 25)"/>
+        <symbol id="sushi-character" viewBox="0 0 220 155">
+            <!-- お皿 -->
+            <ellipse cx="110" cy="128" rx="95" ry="20" fill="#B84A39" stroke="#5A3214" stroke-width="5"/>
+            <ellipse cx="110" cy="124" rx="72" ry="13" fill="#FFFBF0"/>
+            <!-- シャリ -->
+            <path d="M 35 72 C 30 97, 40 122, 90 127 C 140 132, 185 117, 190 92 C 195 77, 170 67, 140 67 C 90 67, 40 62, 35 72 Z" fill="#FFFBF0" stroke="#5A3214" stroke-width="6" stroke-linejoin="round"/>
+            <circle cx="55" cy="97" r="4" fill="#E8DFD0"/>
+            <circle cx="75" cy="107" r="5" fill="#E8DFD0"/>
+            <circle cx="105" cy="112" r="4" fill="#E8DFD0"/>
+            <circle cx="135" cy="107" r="5" fill="#E8DFD0"/>
+            <circle cx="165" cy="97" r="4" fill="#E8DFD0"/>
+            <circle cx="90" cy="92" r="4" fill="#E8DFD0"/>
+            <circle cx="120" cy="94" r="5" fill="#E8DFD0"/>
+            <circle cx="150" cy="87" r="4" fill="#E8DFD0"/>
+            <!-- 顔 -->
+            <circle cx="58" cy="94" r="4.5" fill="#1A1A1A"/>
+            <circle cx="78" cy="96" r="4.5" fill="#1A1A1A"/>
+            <path d="M 62 102 Q 68 109 74 102" fill="none" stroke="#1A1A1A" stroke-width="3.5" stroke-linecap="round"/>
+            <!-- ネタ（サーモン・マグロ） -->
+            <path d="M 25 62 C 20 37, 70 22, 130 27 C 175 32, 200 47, 195 67 C 190 84, 140 87, 80 82 C 35 77, 28 72, 25 62 Z" fill="#F06449" stroke="#5A3214" stroke-width="6" stroke-linejoin="round"/>
+            <path d="M 45 57 Q 75 37 125 40 Q 165 42 185 54" fill="none" stroke="#FFA38F" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+            <path d="M 40 67 Q 80 50 135 52 Q 165 54 180 66" fill="none" stroke="#FFA38F" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
+            <ellipse cx="90" cy="37" rx="25" ry="6" fill="#FFFFFF" opacity="0.4" transform="rotate(-5 90 37)"/>
         </symbol>
     </svg>
 
-    <!-- 背景 -->
+    <!-- スマホ横画面時の警告オーバーレイ（縦画面専用プレイ誘導） -->
+    <div id="portrait-warning">
+        <div class="warning-icon">📱🔄</div>
+        <div class="warning-title" data-i18n="portraitOnlyTitle">縦画面専用です</div>
+        <div class="warning-desc" data-i18n="portraitOnlyDesc">スマートフォンを縦向きにしてプレイしてください</div>
+    </div>
+
+    <!-- 背景（PCやホーム画面用） -->
     <div id="background-layer">
         <div id="home-kanji-bg">寿</div>
-        <div class="conveyor-belt"></div>
+        <div class="conveyor-belt home-belt"></div>
     </div>
 
     <!-- 1. ホーム画面 -->
@@ -70,7 +81,7 @@
         <div class="panel">
             <h2 style="margin: 0 0 20px 0; font-size: 26px;" data-i18n="modeSelectTitle">モード選択</h2>
             <div class="selection-list">
-                <button id="mode-flick-btn" class="selection-btn" style="background-color: #d32f2f;" data-i18n="modeFlick">フリックモード 👆</button>
+                <button id="mode-flick-btn" class="selection-btn" style="background-color: #c24136;" data-i18n="modeFlick">フリックモード 👆</button>
                 <button id="mode-voice-speech-btn" class="selection-btn" style="background-color: #00796b;" data-i18n="modeVoice">音声発話モード 🗣️</button>
             </div>
             <button id="mode-back-btn" class="btn btn-back" data-i18n="backHome">ホームに戻る</button>
@@ -91,18 +102,18 @@
     <div id="create-stage-screen" class="screen hidden">
         <div class="panel">
             <h2 style="margin: 0 0 15px 0; font-size: 24px;" data-i18n="createStageTitle">ステージ新規作成</h2>
-            
             <div class="form-group">
                 <label for="custom-stage-name" data-i18n="stageNameLabel">ステージの名前</label>
                 <input type="text" id="custom-stage-name" class="form-input" data-i18n-placeholder="stageNamePlaceholder" placeholder="例: 果物ステージ">
             </div>
-
             <div class="form-group">
                 <label for="custom-stage-words" data-i18n="wordListLabel">単語リスト (1行に1つの単語ペア)</label>
-                <textarea id="custom-stage-words" class="form-textarea" data-i18n-placeholder="wordListPlaceholder" placeholder="日本語, English&#10;例:&#10;もも, Peach&#10;ぶどう, Grape"></textarea>
+                <textarea id="custom-stage-words" class="form-textarea" data-i18n-placeholder="wordListPlaceholder" placeholder="日本語, English
+例:
+もも, Peach
+ぶどう, Grape"></textarea>
                 <div style="font-size: 11px; opacity: 0.7; margin-top: 4px;" data-i18n="wordListHint">※カンマ(,)で区切って「日本語, 英語」の形式で入力してください。</div>
             </div>
-
             <button id="save-stage-btn" class="btn" style="background-color: #2e7d32; width: 100%; margin: 10px 0 5px 0;" data-i18n="submitCreateBtn">ステージを作成 🚀</button>
             <button id="create-back-btn" class="btn btn-back" style="width: 100%; margin: 0;" data-i18n="backStageSelect">ステージ選択に戻る</button>
         </div>
@@ -140,7 +151,6 @@
             <h3 id="modal-ja" style="font-size: 28px; margin: 0 0 5px 0;">りんご</h3>
             <div id="modal-en-ro" style="font-size: 16px; opacity: 0.9; margin-bottom: 12px;">Apple (ringo)</div>
             <p id="modal-trivia" style="font-size: 14px; line-height: 1.4; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 12px; margin-bottom: 15px; text-align: left;"></p>
-            <!-- モーダル内ボタンのクラス・スタイルを統一しズレを解消 -->
             <button id="modal-speak-btn" class="btn modal-btn" style="background-color: #00796b;">🔊 発音を聞く</button>
             <button id="modal-close-btn" class="btn btn-back modal-btn" data-i18n="closeBtn">とじる</button>
         </div>
@@ -153,8 +163,8 @@
             <div class="selection-list">
                 <button id="toggle-hint-btn" class="selection-btn" style="background-color: #00796b;"></button>
                 <button id="toggle-voice-btn" class="selection-btn" style="background-color: #00796b;"></button>
-                <button id="goto-lang-screen-btn" class="selection-btn" style="background-color: #d32f2f;" data-i18n="langSettingBtn">言語設定 🌐</button>
-                <button id="reset-record-btn" class="selection-btn" style="background-color: #c62828;" data-i18n="resetRecordBtn">最高記録リセット 🗑️</button>
+                <button id="goto-lang-screen-btn" class="selection-btn" style="background-color: #c24136;" data-i18n="langSettingBtn">言語設定 🌐</button>
+                <button id="reset-record-btn" class="selection-btn" style="background-color: #b71c1c;" data-i18n="resetRecordBtn">最高記録リセット 🗑️</button>
             </div>
             <button id="setting-back-btn" class="btn btn-back" data-i18n="backHome">ホームに戻る</button>
         </div>
@@ -173,38 +183,92 @@
         </div>
     </div>
 
-    <!-- 7. ゲーム画面（フリック用） -->
+    <!-- 7. ゲーム画面（モダンデザイン刷新版・フリックモード） -->
     <div id="game-screen" class="screen hidden">
-        <div id="top-lane" class="target-lane">
-            <span class="key-badge" data-i18n="upKey">👆 上スワイプ / ↑</span><span id="top-word"></span>
-        </div>
-
-        <div id="header-info">
-            <div class="info-card"><span data-i18n="stageLabel">ステージ</span>: <span id="current-stage-name"></span></div>
-            <div class="info-card"><span data-i18n="scoreLabel">スコア</span>: <span id="score">0</span></div>
-            <div class="info-card"><span data-i18n="timeLabel">残り時間</span>: <span id="time">30</span><span data-i18n="secUnit">秒</span></div>
-        </div>
-
-        <div id="sushi-container">
-            <div id="sushi-word">
-                <ruby><span id="sushi-hiragana"></span><rt id="sushi-romaji"></rt></ruby>
+        <div class="modern-game-wrapper">
+            <!-- トップヘッダー -->
+            <div class="modern-top-bar">
+                <div class="modern-brand">
+                    <div class="modern-logo">sushi go round</div>
+                    <div class="modern-mode-sub" data-i18n="flickModeLabel">フリックモード</div>
+                </div>
+                <div class="modern-stage-pill" id="current-stage-name">食べ物</div>
             </div>
-            <div>
-                <svg class="sushi-character-img"><use href="#sushi-character"/></svg>
+
+            <!-- スコア＆残り時間ダッシュボード -->
+            <div class="modern-stats-row">
+                <div class="modern-stat-box">
+                    <div class="stat-label" data-i18n="scoreLabel">スコア</div>
+                    <div class="stat-val-group">
+                        <span class="stat-num" id="score">0</span>
+                        <span class="stat-unit">pt</span>
+                    </div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="modern-stat-box stat-right">
+                    <div class="stat-label"><span class="live-dot"></span><span data-i18n="timeLabel">残り時間</span></div>
+                    <div class="stat-val-group">
+                        <span class="stat-num time-color" id="time">30</span>
+                        <span class="stat-unit" data-i18n="secUnit">秒</span>
+                    </div>
+                </div>
             </div>
+
+            <!-- 時間プログレスバー -->
+            <div class="modern-progress-track">
+                <div class="modern-progress-fill" id="time-progress-bar"></div>
+            </div>
+
+            <!-- インストラクション指示 -->
+            <div class="modern-instruction">
+                <span class="inst-arrow">↕</span>
+                <span data-i18n="swipeInstruction">正しい英語へスワイプ</span>
+            </div>
+
+            <!-- 上側回答カード -->
+            <div id="top-lane" class="modern-choice-card">
+                <div class="choice-arrow-circle">↑</div>
+                <div class="choice-text-area">
+                    <div class="choice-hint" data-i18n="upSwipeHint">上にスワイプ</div>
+                    <div class="choice-word" id="top-word">Apple</div>
+                </div>
+                <div class="choice-emoji" id="top-emoji">🍎</div>
+            </div>
+
+            <!-- 中央コンベア＆お寿司エリア -->
+            <div class="modern-conveyor-stage">
+                <div class="modern-belt-track"></div>
+                <div id="sushi-container">
+                    <div id="sushi-word" class="modern-speech-bubble">
+                        <div class="bubble-ja" id="sushi-hiragana">りんご</div>
+                        <div class="bubble-ro" id="sushi-romaji">ringo</div>
+                    </div>
+                    <svg class="sushi-character-img"><use href="#sushi-character"/></svg>
+                </div>
+            </div>
+
+            <!-- 下側回答カード -->
+            <div id="bottom-lane" class="modern-choice-card">
+                <div class="choice-arrow-circle">↓</div>
+                <div class="choice-text-area">
+                    <div class="choice-hint" data-i18n="downSwipeHint">下にスワイプ</div>
+                    <div class="choice-word" id="bottom-word">Banana</div>
+                </div>
+                <div class="choice-emoji" id="bottom-emoji">🍌</div>
+            </div>
+
+            <!-- フッター補助メッセージ -->
+            <div class="modern-footer-hint" data-i18n="tapFooterHint">タップでも回答できるよ</div>
         </div>
 
-        <div id="bottom-lane" class="target-lane">
-            <span class="key-badge" data-i18n="downKey">👇 下スワイプ / ↓</span><span id="bottom-word"></span>
-        </div>
-        
         <div id="result-message"></div>
 
+        <!-- 初回チュートリアルオーバーレイ -->
         <div id="tutorial-overlay" class="hidden">
             <div id="tutorial-hand">👆</div>
             <div id="tutorial-box">
                 <svg class="tutorial-mascot"><use href="#sushi-character"/></svg>
-                <div id="tutorial-text" data-i18n="tutorialText">上下にスワイプするか、レーンをタップしてプレイ！</div>
+                <div id="tutorial-text" data-i18n="tutorialText">上下にスワイプするか、カードをタップしてプレイ！</div>
                 <div id="tutorial-sub-text" data-i18n="hintAutoOffMsg">設定画面からいつでもオンにできます</div>
                 <button id="tutorial-ok-btn" class="btn" style="padding: 10px 30px; font-size: 18px; margin: 0;" data-i18n="okBtn">OK</button>
             </div>
@@ -213,21 +277,47 @@
 
     <!-- 7-B. 音声発話ゲーム画面 -->
     <div id="voice-game-screen" class="screen hidden">
-        <div id="voice-header-info">
-            <div class="info-card"><span data-i18n="stageLabel">ステージ</span>: <span id="voice-current-stage-name"></span></div>
-            <div class="info-card"><span data-i18n="scoreLabel">スコア</span>: <span id="voice-score">0</span></div>
-            <div class="info-card"><span data-i18n="timeLabel">残り時間</span>: <span id="voice-time">30</span><span data-i18n="secUnit">秒</span></div>
-        </div>
+        <div class="modern-game-wrapper">
+            <div class="modern-top-bar">
+                <div class="modern-brand">
+                    <div class="modern-logo">sushi go round</div>
+                    <div class="modern-mode-sub" data-i18n="voiceModeLabel">音声発話モード</div>
+                </div>
+                <div class="modern-stage-pill" id="voice-current-stage-name">食べ物</div>
+            </div>
 
-        <div id="voice-sushi-container">
-            <div id="voice-sushi-word">
-                <ruby><span id="voice-sushi-romaji" style="font-size: 28px; color: #00796b;"></span><rt id="voice-sushi-hiragana" style="font-size: 20px; color: #222; font-weight: bold;"></rt></ruby>
+            <div class="modern-stats-row">
+                <div class="modern-stat-box">
+                    <div class="stat-label" data-i18n="scoreLabel">スコア</div>
+                    <div class="stat-val-group">
+                        <span class="stat-num" id="voice-score">0</span>
+                        <span class="stat-unit">pt</span>
+                    </div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="modern-stat-box stat-right">
+                    <div class="stat-label"><span class="live-dot"></span><span data-i18n="timeLabel">残り時間</span></div>
+                    <div class="stat-val-group">
+                        <span class="stat-num time-color" id="voice-time">30</span>
+                        <span class="stat-unit" data-i18n="secUnit">秒</span>
+                    </div>
+                </div>
             </div>
-            <div>
-                <svg class="sushi-character-img" style="width: 140px; height: 90px;"><use href="#sushi-character"/></svg>
+
+            <div class="modern-progress-track">
+                <div class="modern-progress-fill" id="voice-time-progress-bar"></div>
             </div>
-            <div id="voice-status-hint" data-i18n="voiceHintPrompt">
-                🎤 マイクに向かって発音してね...
+
+            <div class="voice-center-stage">
+                <div class="modern-belt-track"></div>
+                <div id="voice-sushi-container">
+                    <div id="voice-sushi-word" class="modern-speech-bubble">
+                        <div class="bubble-ja" id="voice-sushi-hiragana">りんご</div>
+                        <div class="bubble-ro" id="voice-sushi-romaji">ringo</div>
+                    </div>
+                    <svg class="sushi-character-img" style="width: 150px; height: 105px;"><use href="#sushi-character"/></svg>
+                    <div id="voice-status-hint" data-i18n="voiceHintPrompt">🎤 マイクに向かって発音してね...</div>
+                </div>
             </div>
         </div>
 
@@ -241,11 +331,10 @@
             <div style="font-size: 20px; opacity: 0.8;" data-i18n="finalScoreLabel">獲得スコア</div>
             <div class="final-score-value" id="final-score">0</div>
             <div class="new-record" id="new-record-msg"></div>
-            <button id="modal-home-btn" class="btn" style="background-color: #d32f2f;" data-i18n="backHome">ホームに戻る</button>
+            <button id="modal-home-btn" class="btn" style="background-color: #c24136;" data-i18n="backHome">ホームに戻る</button>
         </div>
     </div>
 
-    <!-- 外部スクリプトの読み込み -->
     <script src="words.js"></script>
     <script src="game.js"></script>
 </body>

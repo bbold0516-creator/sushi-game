@@ -1,6 +1,14 @@
 // --- 多言語辞書データ ---
 const i18n = {
     ja: {
+        portraitOnlyTitle: "縦画面専用です",
+        portraitOnlyDesc: "スマートフォンを縦向きにしてプレイしてください",
+        flickModeLabel: "フリックモード",
+        voiceModeLabel: "音声発話モード",
+        swipeInstruction: "正しい英語へスワイプ",
+        upSwipeHint: "上にスワイプ",
+        downSwipeHint: "下にスワイプ",
+        tapFooterHint: "タップでも回答できるよ",
         totalBestScore: "合計ベストスコア",
         stageBtn: "スタート 🎮",
         storeBtn: "マイストア 🛒",
@@ -33,7 +41,7 @@ const i18n = {
         voiceLabel: "音声読み上げ",
         on: "オン (ON)",
         off: "オフ (OFF)",
-        tutorialText: "スワイプまたは↑キー、↓キーを押してプレイ",
+        tutorialText: "上下にスワイプするか、カードをタップしてプレイ！",
         hintAutoOffMsg: "設定画面からいつでもオンにできます",
         okBtn: "OK",
         closeBtn: "とじる",
@@ -46,8 +54,6 @@ const i18n = {
         scoreLabel: "スコア",
         timeLabel: "残り時間",
         secUnit: "秒",
-        upKey: "↑ キー",
-        downKey: "↓ キー",
         timeUp: "TIME UP!",
         finalScoreLabel: "獲得スコア",
         newRecord: "★ NEW RECORD ★",
@@ -60,16 +66,24 @@ const i18n = {
         speakBtn: "🔊 発音を聞く",
         voiceHintPrompt: "🎤 マイクで発音してね...",
         themes: ["スタンダード", "和風・高級木目", "ドット絵・8bit風", "サイバーネオン", "プレミアムゴールド"],
-        stages: ["あいさつ・基本", "生き物", "食べ物", "ランダム", "リトライ"]
+        stages: ["あいさつ", "生き物", "食べ物", "ランダム", "リトライ"]
     },
     en: {
+        portraitOnlyTitle: "Portrait Mode Only",
+        portraitOnlyDesc: "Please rotate your phone to portrait orientation to play",
+        flickModeLabel: "Flick Mode",
+        voiceModeLabel: "Voice Speech Mode",
+        swipeInstruction: "Swipe to the correct English",
+        upSwipeHint: "Swipe Up",
+        downSwipeHint: "Swipe Down",
+        tapFooterHint: "You can also tap the card to answer",
         totalBestScore: "Total Best Score",
         stageBtn: "Start 🎮",
         storeBtn: "My Store 🛒",
         zukanBtn: "Word List 📖",
         settingBtn: "Settings ⚙️",
         modeSelectTitle: "Select Mode",
-        modeFlick: "Flick (Standard) Mode 👆",
+        modeFlick: "Flick Mode 👆",
         modeVoice: "Voice Speech Mode 🗣️",
         backModeSelect: "Back to Mode Select",
         stageSelect: "Select Stage",
@@ -95,7 +109,7 @@ const i18n = {
         voiceLabel: "Voice Reading",
         on: "ON",
         off: "OFF",
-        tutorialText: "Swipe or press Up/Down keys to play",
+        tutorialText: "Swipe up/down or tap a card to play!",
         hintAutoOffMsg: "You can turn it on anytime from settings",
         okBtn: "OK",
         closeBtn: "Close",
@@ -108,8 +122,6 @@ const i18n = {
         scoreLabel: "Score",
         timeLabel: "Time Left",
         secUnit: "s",
-        upKey: "↑ Key",
-        downKey: "↓ Key",
         timeUp: "TIME UP!",
         finalScoreLabel: "Final Score",
         newRecord: "★ NEW RECORD ★",
@@ -126,7 +138,7 @@ const i18n = {
     }
 };
 
-// --- デフォルトステージの問題データ（英語トリビア追加） ---
+// --- デフォルトステージの問題データ ---
 const defaultStagesData = [
     {
         words: [
@@ -197,7 +209,7 @@ const defaultStagesData = [
 
 // --- テーマデータ ---
 const themes = [
-    { id: 'theme-default', unlockScore: 0, color: '#d32f2f', mode: 'flick' },
+    { id: 'theme-default', unlockScore: 0, color: '#c24136', mode: 'flick' },
     { id: 'theme-wood', unlockScore: 500, color: '#795548', mode: 'flick' },
     { id: 'theme-pixel', unlockScore: 2500, color: '#00ffcc', mode: 'flick' },
     { id: 'theme-neon', unlockScore: 1000, color: '#00BCD4', mode: 'voice' },
