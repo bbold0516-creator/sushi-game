@@ -134,7 +134,6 @@ body {
     50% { transform: rotate(-90deg); }
 }
 
-/* スマホ等の高さが低い横画面（高さ500px以下 かつ 横幅が高さより大きい）のときだけ表示 */
 @media screen and (max-height: 500px) and (orientation: landscape) {
     #portrait-warning {
         display: flex !important;
@@ -274,7 +273,7 @@ body {
 .form-textarea { height: 90px; resize: none; }
 
 /* ==========================================
-   5. 新モダンゲーム画面デザイン（スクリーンショット再現）
+   5. ゲーム画面デザイン（スマホ縦画面ベース）
    ========================================== */
 #game-screen, #voice-game-screen {
     background-color: var(--bg-color);
@@ -557,7 +556,6 @@ body {
     filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
 }
 
-/* フッター補助メッセージ */
 .modern-footer-hint {
     font-size: 12px;
     font-weight: bold;
@@ -565,7 +563,6 @@ body {
     margin-top: 2px;
 }
 
-/* フィーバー時の虹色アニメーション */
 @keyframes rainbowBorder {
     0% { border-color: #ff0000; }
     20% { border-color: #ffa500; }
@@ -579,7 +576,6 @@ body {
     border-width: 2.5px;
 }
 
-/* 音声モードの中央配置調整 */
 .voice-center-stage {
     position: relative;
     width: 100vw;
@@ -613,7 +609,6 @@ body {
     border-radius: 20px;
 }
 
-/* 正解・不正解ポップアップ */
 #result-message, #voice-result-message {
     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
     font-size: min(14vw, 56px); font-weight: 900; opacity: 0; transition: all 0.2s ease-out; z-index: 200; white-space: nowrap;
@@ -623,7 +618,6 @@ body {
 #result-message.success, #voice-result-message.success { color: #2e7d32; text-shadow: 0 0 12px white, 0 0 20px white; }
 #result-message.miss, #voice-result-message.miss { color: #c24136; text-shadow: 0 0 12px white, 0 0 20px white; }
 
-/* チュートリアルモーダル */
 #tutorial-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100dvh;
     background: rgba(0, 0, 0, 0.65); z-index: 250;
@@ -642,9 +636,6 @@ body {
 #tutorial-sub-text { font-size: 12px; opacity: 0.75; margin-bottom: 15px; }
 .tutorial-mascot { width: 85px; height: 60px; margin-bottom: 8px; }
 
-/* ==========================================
-   6. ゲーム終了モーダル
-   ========================================== */
 #game-over-modal {
     position: fixed; top: 0; left: 0; width: 100%; height: 100dvh; background: rgba(0,0,0,0.75);
     display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 300; opacity: 0; pointer-events: none; transition: opacity 0.3s;
@@ -655,3 +646,58 @@ body {
 .modal-title { font-size: 38px; font-weight: bold; margin-bottom: 8px; }
 .final-score-value { font-size: min(15vw, 64px); font-weight: bold; color: #ffccbc; margin-bottom: 8px; }
 .new-record { color: #ff5252; font-size: 20px; font-weight: bold; margin-bottom: 15px; height: 25px; }
+
+
+/* ==========================================
+   6. タブレット・パソコン（横幅768px以上）向けの横画面レイアウト（変更前デザイン）
+   ========================================== */
+@media screen and (min-width: 768px) {
+    #game-screen, #voice-game-screen {
+        padding: 24px 40px;
+    }
+    
+    .modern-game-wrapper {
+        max-width: 750px;
+        padding: 16px 28px;
+        background-color: var(--card-bg);
+        border: 2px solid var(--card-border);
+        border-radius: 32px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .modern-top-bar {
+        margin-bottom: 6px;
+    }
+
+    .modern-stats-row {
+        background-color: var(--pill-bg);
+        padding: 12px 24px;
+        border-radius: 20px;
+        margin-bottom: 8px;
+    }
+
+    .stat-num {
+        font-size: 44px;
+    }
+
+    .modern-conveyor-stage {
+        height: 210px;
+    }
+
+    .modern-choice-card {
+        padding: 16px 26px;
+        border-radius: 26px;
+    }
+
+    .choice-word {
+        font-size: 28px;
+    }
+
+    .choice-emoji {
+        font-size: 42px;
+    }
+
+    .modern-instruction {
+        font-size: 15px;
+    }
+}
